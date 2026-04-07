@@ -124,7 +124,9 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       {/* Image placeholder */}
       <section className="section-padding bg-black-DEFAULT">
         <div className="container-luxury">
-          <div className="aspect-[21/9] rounded-sm bg-gradient-to-br from-gold/10 via-black-surface to-gold/5 border border-black-border" />
+          <div className="aspect-[21/9] rounded-sm border border-black-border overflow-hidden">
+            <img src={service.image || "/images/placeholder-service.jpg"} alt={service.title} className="w-full h-full object-cover" />
+          </div>
         </div>
       </section>
 
@@ -154,7 +156,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                   href={`/properties/${property.slug}`}
                   className="card-luxury group"
                 >
-                  <div className="aspect-[4/3] bg-gradient-to-br from-gold/10 via-black-surface to-gold/5 relative overflow-hidden">
+                  <div className="aspect-[4/3] relative overflow-hidden">
+                    <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black-DEFAULT/80 to-transparent" />
                     <div className="absolute bottom-4 left-4 flex items-center gap-1 text-sm text-gray-light">
                       <MapPin className="w-3.5 h-3.5" />

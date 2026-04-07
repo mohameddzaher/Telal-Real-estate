@@ -171,7 +171,7 @@ export default function PropertyDetailPage({
 
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px] w-full">
-        <div className="absolute inset-0 bg-gradient-to-br from-black-surface to-black-deep" />
+        <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
         <div className="container-luxury relative z-10 flex h-full flex-col justify-end pb-12">
           <nav className="mb-6 flex items-center gap-2 text-sm text-gray-light">
@@ -311,11 +311,14 @@ export default function PropertyDetailPage({
                     </div>
                   </div>
                   <div className="mt-4 overflow-hidden rounded-sm border border-black-border">
-                    <div className="flex aspect-[16/9] items-center justify-center bg-gradient-to-br from-black-surface to-black-deep">
-                      <p className="text-sm text-gray-mid">
-                        Interactive map coming soon
-                      </p>
-                    </div>
+                    <iframe
+                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(property.location + ', ' + property.city)}&zoom=14&maptype=roadmap`}
+                      className="aspect-[16/9] w-full border-0"
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={`Map of ${property.location}`}
+                    />
                   </div>
                 </div>
               </div>
@@ -327,12 +330,12 @@ export default function PropertyDetailPage({
                 </h2>
                 <div className="mt-2 h-px w-16 bg-gold" />
                 <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3">
-                  {Array.from({ length: 6 }).map((_, i) => (
+                  {(property.images.length > 0 ? property.images : [{ url: "/images/placeholder-property.jpg", alt: property.title }]).map((img, i) => (
                     <div
                       key={i}
                       className="aspect-[4/3] overflow-hidden rounded-sm border border-black-border"
                     >
-                      <div className="h-full w-full bg-gradient-to-br from-black-surface to-black-deep" />
+                      <img src={img.url} alt={img.alt || `${property.title} ${i + 1}`} className="h-full w-full object-cover" />
                     </div>
                   ))}
                 </div>
@@ -457,7 +460,7 @@ export default function PropertyDetailPage({
                   className="card-luxury group"
                 >
                   <div className="relative aspect-video overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-br from-black-surface to-black-deep transition-transform duration-700 ease-luxury group-hover:scale-105" />
+                    <img src={p.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={p.title} className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
                   </div>
                   <div className="p-6">
                     <h3 className="font-display text-xl font-light text-white transition-colors group-hover:text-gold">

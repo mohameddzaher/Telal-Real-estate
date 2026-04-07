@@ -69,7 +69,7 @@ export default function ProjectsShowcase() {
               >
                 {/* Image */}
                 <div className="w-full lg:w-[60%] aspect-[16/10] rounded-sm overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-black-surface to-black-deep" />
+                  <img src={project.coverImage || "/images/placeholder-project.jpg"} alt={project.name} className="w-full h-full object-cover" />
                 </div>
 
                 {/* Text */}

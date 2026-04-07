@@ -181,7 +181,7 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="mx-auto max-w-content px-gutter py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-white/25">
-            &copy; 2024 {SITE_CONFIG.name}. All rights reserved.
+            &copy; 2026 {SITE_CONFIG.name}. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link

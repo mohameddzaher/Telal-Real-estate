@@ -26,13 +26,13 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Telal Development — Luxury Real Estate Saudi Arabia",
+  title: "Telal Development — Luxury Real Estate Across the Middle East",
   description:
-    "Where Vision Meets Legacy. Telal Development redefines luxury living with premium residential and commercial developments across Saudi Arabia. 47+ projects, SAR 2.8B+ portfolio.",
+    "Where Vision Meets Legacy. Telal Development redefines luxury living with premium residential and commercial developments across the Middle East. 47+ projects, SAR 2.8B+ portfolio.",
   openGraph: {
     title: "Telal Development — Where Vision Meets Legacy",
     description:
-      "Premium luxury real estate development in Saudi Arabia. Residential, commercial, and mixed-use projects.",
+      "Premium luxury real estate development across the Middle East. Residential, commercial, and mixed-use projects.",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 };

@@ -9,7 +9,7 @@ import { PropertyType, PropertyStatus } from "@/types";
 export const metadata: Metadata = {
   title: `Properties | ${SITE_CONFIG.name}`,
   description:
-    "Explore our curated collection of luxury properties across Saudi Arabia — penthouses, villas, apartments, commercial spaces, and exclusive off-plan developments.",
+    "Explore our curated collection of luxury properties across the Middle East — penthouses, villas, apartments, commercial spaces, and exclusive off-plan developments.",
 };
 
 const PROPERTY_TYPES = [
@@ -250,7 +250,7 @@ export default function PropertiesPage({
                 >
                   {/* Image */}
                   <div className="relative aspect-video overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-br from-black-surface to-black-deep transition-transform duration-700 ease-luxury group-hover:scale-105" />
+                    <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
                     {/* Type Badge */}
                     <span className="absolute left-4 top-4 rounded-sm bg-gold/90 px-3 py-1 text-xs font-medium uppercase tracking-wider text-black">
                       {formatType(property.type)}

@@ -116,7 +116,7 @@ export default function ProjectDetailPage({
     <main>
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px] w-full">
-        <div className="absolute inset-0 bg-gradient-to-br from-black-surface to-black-deep" />
+        <img src={project.coverImage || "/images/placeholder-project.jpg"} alt={project.name} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
         <div className="container-luxury relative z-10 flex h-full flex-col justify-end pb-12">
           <nav className="mb-6 flex items-center gap-2 text-sm text-gray-light">
@@ -190,14 +190,14 @@ export default function ProjectDetailPage({
           </h2>
           <div className="mt-4 h-px w-16 bg-gold" />
           <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {(project.gallery.length > 0 ? project.gallery : [project.coverImage]).map((imgUrl, i) => (
               <div
                 key={i}
                 className={`overflow-hidden rounded-sm border border-black-border ${
                   i === 0 ? "col-span-2 row-span-2 aspect-square" : "aspect-[4/3]"
                 }`}
               >
-                <div className="h-full w-full bg-gradient-to-br from-black-surface to-black-deep" />
+                <img src={imgUrl} alt={`${project.name} gallery ${i + 1}`} className="h-full w-full object-cover" />
               </div>
             ))}
           </div>
@@ -222,7 +222,7 @@ export default function ProjectDetailPage({
                   className="card-luxury group"
                 >
                   <div className="relative aspect-video overflow-hidden">
-                    <div className="h-full w-full bg-gradient-to-br from-black-surface to-black-deep transition-transform duration-700 ease-luxury group-hover:scale-105" />
+                    <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
                   </div>
                   <div className="p-6">
                     <h3 className="font-display text-xl font-light text-white transition-colors group-hover:text-gold">

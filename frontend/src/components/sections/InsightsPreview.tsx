@@ -40,7 +40,7 @@ export default function InsightsPreview() {
               >
                 {/* Image placeholder */}
                 <div className="relative aspect-[16/9] overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-black-surface to-black-deep transition-transform duration-700 ease-luxury group-hover:scale-105" />
+                  <img src={post.coverImage || "/images/placeholder-blog.jpg"} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
                   <span className="absolute bottom-3 left-3 px-3 py-1 text-xs uppercase tracking-wider bg-gold/90 text-black rounded-sm font-body font-medium">
                     {post.category}
                   </span>

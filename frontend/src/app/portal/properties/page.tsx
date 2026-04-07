@@ -26,8 +26,8 @@ export default function PortalPropertiesPage() {
             className="bg-black-deep border border-black-border rounded-sm overflow-hidden group hover:border-gold/20 transition-all duration-500"
           >
             {/* Image placeholder */}
-            <div className="relative aspect-[4/3] bg-black-surface flex items-center justify-center">
-              <span className="text-gray-mid text-xs uppercase tracking-wider">Property Image</span>
+            <div className="relative aspect-[4/3] bg-black-surface overflow-hidden">
+              <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="w-full h-full object-cover" />
               {/* Remove favorite button */}
               <button className="absolute top-3 right-3 w-8 h-8 bg-black/60 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center hover:bg-error/20 hover:border-error/30 transition-colors">
                 <Heart className="w-4 h-4 text-gold fill-gold" />

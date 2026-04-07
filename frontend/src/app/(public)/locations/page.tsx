@@ -6,7 +6,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 export const metadata: Metadata = {
   title: `Our Locations | ${SITE_CONFIG.name}`,
   description:
-    "Discover Telal Development's presence across Saudi Arabia and the Gulf — Riyadh, Jeddah, NEOM Belt, Eastern Province, and Dubai.",
+    "Discover Telal Development's presence across the Middle East — Riyadh, Jeddah, NEOM Belt, Eastern Province, and Dubai.",
 };
 
 const cityDetails: Record<

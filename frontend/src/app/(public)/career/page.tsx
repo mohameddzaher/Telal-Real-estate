@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: `Careers at ${SITE_CONFIG.name}`,
   description:
-    "Join Telal Development and build your career with one of Saudi Arabia's leading luxury real estate developers. Explore open positions.",
+    "Join Telal Development and build your career with one of the Middle East's leading luxury real estate developers. Explore open positions.",
 };
 
 const benefits = [
@@ -127,7 +127,7 @@ export default function CareerPage() {
             building the landmarks of tomorrow. With over 16 years of
             excellence and a portfolio valued at SAR 2.8B+, we offer our
             team members the opportunity to work on some of the most
-            prestigious developments in Saudi Arabia and beyond.
+            prestigious developments in the Middle East and beyond.
           </p>
           <p className="body-text">
             We foster a culture of innovation, integrity, and professional

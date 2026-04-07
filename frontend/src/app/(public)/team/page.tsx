@@ -8,7 +8,7 @@ import { Briefcase } from "lucide-react";
 export const metadata: Metadata = {
   title: `Our Leadership | ${SITE_CONFIG.name}`,
   description:
-    "Meet the visionary leaders driving Telal Development — the minds shaping Saudi Arabia's luxury real estate landscape.",
+    "Meet the visionary leaders driving Telal Development — the minds shaping the Middle East's luxury real estate landscape.",
 };
 
 export default function TeamPage() {
@@ -36,7 +36,8 @@ export default function TeamPage() {
             {teamMembers.map((member) => (
               <div key={member.id} className="card-luxury group">
                 {/* Image placeholder */}
-                <div className="aspect-[3/4] bg-gradient-to-br from-gold/10 via-black-surface to-gold/5 relative overflow-hidden">
+                <div className="aspect-[3/4] relative overflow-hidden">
+                  <img src={member.image || "/images/placeholder-team.jpg"} alt={member.name} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black-DEFAULT/80 to-transparent" />
                 </div>
 

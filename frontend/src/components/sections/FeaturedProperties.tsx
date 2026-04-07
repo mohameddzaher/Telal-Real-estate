@@ -42,7 +42,7 @@ export default function FeaturedProperties() {
               >
                 {/* Image placeholder */}
                 <div className="relative aspect-[3/4] overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-black-surface to-black-deep transition-transform duration-700 ease-luxury group-hover:scale-105" />
+                  <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
                   {/* Type badge */}
                   <span className="absolute top-3 left-3 px-3 py-1 text-xs uppercase tracking-wider bg-black/70 text-gold border border-gold/20 rounded-sm font-body">
                     {property.type.replace("_", " ")}

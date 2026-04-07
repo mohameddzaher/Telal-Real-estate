@@ -30,7 +30,7 @@ export default function LocationsMap() {
           <div className="absolute inset-0 grid-pattern" />
           <div className="absolute inset-0 bg-radial-gold opacity-20" />
 
-          {/* City markers positioned roughly on a conceptual Saudi Arabia map */}
+          {/* City markers positioned roughly on a conceptual Middle East map */}
           {CITIES.map((city, i) => {
             // Convert lat/lng to rough percentage positions on the container
             const positions: Record<string, { left: string; top: string }> = {

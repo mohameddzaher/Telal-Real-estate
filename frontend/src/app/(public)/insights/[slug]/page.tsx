@@ -105,7 +105,8 @@ export default async function InsightDetailPage({ params }: PageProps) {
       {/* Hero */}
       <section className="relative overflow-hidden">
         {/* Image placeholder */}
-        <div className="aspect-[21/9] bg-gradient-to-br from-gold/15 via-black-surface to-gold/5 relative">
+        <div className="aspect-[21/9] relative overflow-hidden">
+          <img src={post.coverImage || "/images/placeholder-blog.jpg"} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black-DEFAULT via-black-DEFAULT/60 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 section-padding pb-12">
             <div className="container-luxury">
@@ -158,7 +159,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
                 {post.body}
               </p>
               <p>
-                The Saudi Arabian luxury real estate market continues to evolve
+                The Middle Eastern luxury real estate market continues to evolve
                 at a remarkable pace, driven by the ambitious Vision 2030
                 programme and an influx of international investment. Developers
                 like Telal are at the forefront of this transformation,
@@ -178,7 +179,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
                 business, tourism, and luxury living, the real estate sector
                 stands to benefit enormously. Forward-thinking developers who
                 prioritise quality, innovation, and client experience will
-                define the next chapter of Saudi Arabia&apos;s property
+                define the next chapter of the Middle East&apos;s property
                 landscape.
               </p>
             </div>
@@ -246,7 +247,8 @@ export default async function InsightDetailPage({ params }: PageProps) {
                   href={`/insights/${related.slug}`}
                   className="card-luxury group flex flex-col"
                 >
-                  <div className="aspect-[16/10] bg-gradient-to-br from-gold/10 via-black-surface to-gold/5 relative">
+                  <div className="aspect-[16/10] relative overflow-hidden">
+                    <img src={related.coverImage || "/images/placeholder-blog.jpg"} alt={related.title} className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-gold/90 text-black-DEFAULT text-xs uppercase tracking-wider rounded-sm font-medium">
                         {related.category}

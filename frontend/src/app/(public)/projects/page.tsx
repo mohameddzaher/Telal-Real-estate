@@ -15,7 +15,7 @@ import { truncate } from "@/lib/utils";
 export const metadata: Metadata = {
   title: `Projects | ${SITE_CONFIG.name}`,
   description:
-    "Explore Telal Development's landmark projects across Saudi Arabia — from iconic residential towers and mixed-use communities to world-class commercial complexes.",
+    "Explore Telal Development's landmark projects across the Middle East — from iconic residential towers and mixed-use communities to world-class commercial complexes.",
 };
 
 const STATUS_TABS = [
@@ -137,7 +137,7 @@ export default function ProjectsPage({
                     >
                       {/* Cover Image */}
                       <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[420px]">
-                        <div className="h-full w-full bg-gradient-to-br from-black-surface to-black-deep" />
+                        <img src={project.coverImage || "/images/placeholder-project.jpg"} alt={project.name} className="h-full w-full object-cover" />
                         <span
                           className={`absolute left-4 top-4 rounded-sm px-3 py-1 text-xs font-medium uppercase tracking-wider ${STATUS_COLORS[project.status]} ${isReversed ? "lg:[direction:ltr]" : ""}`}
                         >

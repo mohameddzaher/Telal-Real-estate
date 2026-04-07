@@ -8,7 +8,7 @@ import { ArrowRight, Clock, User } from "lucide-react";
 export const metadata: Metadata = {
   title: `Market Insights | ${SITE_CONFIG.name}`,
   description:
-    "Expert analysis, market trends, and investment guides from Telal Development — your trusted source for Saudi luxury real estate insights.",
+    "Expert analysis, market trends, and investment guides from Telal Development — your trusted source for Middle Eastern luxury real estate insights.",
 };
 
 export default function InsightsPage() {
@@ -28,7 +28,7 @@ export default function InsightsPage() {
           </h1>
           <p className="body-text max-w-2xl mx-auto">
             Expert analysis, investment guides, and thought leadership from
-            the forefront of Saudi Arabia&apos;s luxury real estate market.
+            the forefront of the Middle East&apos;s luxury real estate market.
           </p>
         </div>
       </section>
@@ -41,7 +41,8 @@ export default function InsightsPage() {
               href={`/insights/${featured.slug}`}
               className="group grid grid-cols-1 lg:grid-cols-2 gap-8 card-luxury overflow-hidden"
             >
-              <div className="aspect-[16/10] lg:aspect-auto bg-gradient-to-br from-gold/15 via-black-surface to-gold/5 relative">
+              <div className="aspect-[16/10] lg:aspect-auto relative overflow-hidden">
+                <img src={featured.coverImage || "/images/placeholder-blog.jpg"} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black-DEFAULT/50 hidden lg:block" />
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 bg-gold/90 text-black-DEFAULT text-xs uppercase tracking-wider rounded-sm font-medium">
@@ -97,7 +98,8 @@ export default function InsightsPage() {
                   href={`/insights/${post.slug}`}
                   className="card-luxury group flex flex-col"
                 >
-                  <div className="aspect-[16/10] bg-gradient-to-br from-gold/10 via-black-surface to-gold/5 relative">
+                  <div className="aspect-[16/10] relative overflow-hidden">
+                    <img src={post.coverImage || "/images/placeholder-blog.jpg"} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-gold/90 text-black-DEFAULT text-xs uppercase tracking-wider rounded-sm font-medium">
                         {post.category}

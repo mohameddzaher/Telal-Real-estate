@@ -6,7 +6,7 @@ import { Shield, Lightbulb, Award, Leaf } from "lucide-react";
 export const metadata: Metadata = {
   title: `About ${SITE_CONFIG.name}`,
   description:
-    "Discover the story behind Telal Development — redefining luxury real estate in Saudi Arabia since 2008.",
+    "Discover the story behind Telal Development — redefining luxury real estate across the Middle East since 2008.",
 };
 
 const values = [
@@ -82,7 +82,7 @@ export default function AboutPage() {
           </h1>
           <p className="body-text max-w-2xl mx-auto">
             Since 2008, Telal Development has been crafting extraordinary living
-            and working spaces that honour Saudi Arabia&apos;s rich heritage
+            and working spaces that honour the region&apos;s rich heritage
             while embracing a bold future.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
               <div className="space-y-6 body-text">
                 <p>
                   Founded in 2008 by Sultan Al-Rashid, Telal Development was
-                  born from a singular conviction: that Saudi Arabia deserves
+                  born from a singular conviction: that the Middle East deserves
                   real estate of the highest international calibre, rooted in
                   the culture and aspirations of its people.
                 </p>
@@ -128,7 +128,9 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-[4/5] rounded-sm bg-gradient-to-br from-gold/20 via-black-surface to-gold/5 border border-black-border" />
+              <div className="aspect-[4/5] rounded-sm border border-black-border overflow-hidden">
+                <img src="/images/about-story.jpg" alt="Telal Development landmark building" className="w-full h-full object-cover" />
+              </div>
               <div className="absolute -bottom-6 -left-6 w-48 h-48 bg-gradient-to-br from-gold/30 to-transparent rounded-sm blur-sm" />
             </div>
           </div>
