@@ -46,9 +46,7 @@ export default function Header() {
           <nav className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
             <Link href="/" className="relative z-10">
-              <span className="font-display text-2xl lg:text-3xl font-bold text-gold tracking-[0.3em] uppercase">
-                TELAL
-              </span>
+              <img src="/images/wide.png" alt="Telal Development" className="h-8 w-auto" />
             </Link>
 
             {/* Desktop Navigation */}

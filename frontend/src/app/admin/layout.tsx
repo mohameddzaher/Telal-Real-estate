@@ -69,7 +69,7 @@ export default function AdminLayout({
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-black-border">
           <Link href="/admin">
-            <span className="font-display text-xl text-gold tracking-[0.3em]">TELAL</span>
+            <img src="/images/wide.png" alt="Telal Development" className="h-6 w-auto" />
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}

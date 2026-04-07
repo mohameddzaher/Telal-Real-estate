@@ -56,6 +56,10 @@ export const metadata: Metadata = {
     title: "Telal Development — Luxury Real Estate Across the Middle East",
     description: "Redefining Luxury Living. Premium real estate developments.",
   },
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
   robots: { index: true, follow: true },
   metadataBase: new URL("https://telaldevelopment.com"),
 };

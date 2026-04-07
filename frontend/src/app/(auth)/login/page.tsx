@@ -50,7 +50,7 @@ export default function LoginPage() {
       {/* Logo */}
       <div className="text-center mb-10">
         <Link href="/">
-          <span className="font-display text-3xl text-gold tracking-[0.3em]">TELAL</span>
+          <img src="/images/wide.png" alt="Telal Development" className="h-10 w-auto mx-auto" />
         </Link>
       </div>
 

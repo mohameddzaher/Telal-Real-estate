@@ -36,9 +36,7 @@ export default function Footer() {
           {/* Column 1: Brand */}
           <div className="lg:col-span-1">
             <Link href="/">
-              <span className="font-display text-2xl font-bold text-gold tracking-[0.3em] uppercase">
-                TELAL
-              </span>
+              <img src="/images/wide.png" alt="Telal Development" className="h-8 w-auto" />
             </Link>
             <p className="mt-4 font-body text-sm text-white/40 leading-relaxed">
               {SITE_CONFIG.tagline}

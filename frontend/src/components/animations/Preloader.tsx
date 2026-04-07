@@ -11,7 +11,7 @@ export default function Preloader() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
-  const lettersRef = useRef<SVGSVGElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -33,20 +33,12 @@ export default function Preloader() {
     const overlay = overlayRef.current;
     const counter = counterRef.current;
     const line = lineRef.current;
-    const svg = lettersRef.current;
-    if (!overlay || !counter || !line || !svg) return;
+    const logo = logoRef.current;
+    if (!overlay || !counter || !line || !logo) return;
 
     document.body.style.overflow = "hidden";
 
-    const paths = svg.querySelectorAll<SVGPathElement>("path");
-    paths.forEach((path) => {
-      const length = path.getTotalLength();
-      gsap.set(path, {
-        strokeDasharray: length,
-        strokeDashoffset: length,
-        fill: "transparent",
-      });
-    });
+    gsap.set(logo, { opacity: 0, scale: 0.8 });
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -69,27 +61,17 @@ export default function Preloader() {
       },
     }, 0);
 
-    // Letter-by-letter SVG path draw
-    paths.forEach((path, i) => {
-      tl.to(
-        path,
-        {
-          strokeDashoffset: 0,
-          duration: 0.35,
-          ease: "power2.out",
-        },
-        0.1 + i * 0.15
-      );
-      tl.to(
-        path,
-        {
-          fill: "#C9A84C",
-          duration: 0.3,
-          ease: "power1.in",
-        },
-        0.3 + i * 0.15
-      );
-    });
+    // Fade in and scale up logo
+    tl.to(
+      logo,
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 1.0,
+        ease: "power2.out",
+      },
+      0.2
+    );
 
     // Golden line sweep at ~2.0s
     tl.fromTo(
@@ -120,54 +102,13 @@ export default function Preloader() {
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black-DEFAULT"
       aria-hidden="true"
     >
-      {/* TELAL Logo SVG - letter paths */}
-      <svg
-        ref={lettersRef}
-        viewBox="0 0 400 80"
-        className="w-[280px] md:w-[400px]"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* T */}
-        <path
-          d="M10 15 L70 15 M40 15 L40 65"
-          stroke="#C9A84C"
-          strokeWidth="3"
-          fill="transparent"
-          strokeLinecap="round"
-        />
-        {/* E */}
-        <path
-          d="M85 15 L85 65 M85 15 L125 15 M85 40 L118 40 M85 65 L125 65"
-          stroke="#C9A84C"
-          strokeWidth="3"
-          fill="transparent"
-          strokeLinecap="round"
-        />
-        {/* L */}
-        <path
-          d="M145 15 L145 65 L185 65"
-          stroke="#C9A84C"
-          strokeWidth="3"
-          fill="transparent"
-          strokeLinecap="round"
-        />
-        {/* A */}
-        <path
-          d="M215 65 L235 15 L255 65 M221 50 L249 50"
-          stroke="#C9A84C"
-          strokeWidth="3"
-          fill="transparent"
-          strokeLinecap="round"
-        />
-        {/* L */}
-        <path
-          d="M275 15 L275 65 L315 65"
-          stroke="#C9A84C"
-          strokeWidth="3"
-          fill="transparent"
-          strokeLinecap="round"
-        />
-      </svg>
+      {/* TELAL Logo */}
+      <img
+        ref={logoRef}
+        src="/images/square-512.png"
+        alt="Telal Development"
+        className="w-24 h-24 object-contain"
+      />
 
       {/* Golden horizontal line */}
       <div

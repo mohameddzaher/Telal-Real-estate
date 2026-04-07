@@ -39,7 +39,7 @@ export default function PortalLayout({
       {/* Header */}
       <header className="h-16 bg-[#090909] border-b border-black-border flex items-center px-6 sticky top-0 z-50">
         <Link href="/portal">
-          <span className="font-display text-xl text-gold tracking-[0.3em]">TELAL</span>
+          <img src="/images/wide.png" alt="Telal Development" className="h-7 w-auto" />
         </Link>
         <span className="text-xs text-gray-mid uppercase tracking-wider ml-4 border-l border-black-border pl-4">
           My Portal
