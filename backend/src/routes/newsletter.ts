@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { newsletterSchema } from "../lib/validations";
-import { z } from "zod";
 
 const router = Router();
 

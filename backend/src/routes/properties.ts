@@ -2,7 +2,6 @@ import { Router, Request, Response } from "express";
 import { properties } from "../lib/data";
 import { propertySchema } from "../lib/validations";
 import { validate } from "../middleware/validate";
-import { z } from "zod";
 
 const router = Router();
 

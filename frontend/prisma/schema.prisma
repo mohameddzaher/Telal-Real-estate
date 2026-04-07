@@ -3,67 +3,17 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  MANAGER
-  AGENT
-  ANALYST
-  CONTENT_EDITOR
-  CLIENT
-  GUEST
-}
-
-enum PropertyType {
-  RESIDENTIAL
-  COMMERCIAL
-  MIXED_USE
-  OFF_PLAN
-  RETAIL
-  HOSPITALITY
-}
-
-enum PropertyStatus {
-  AVAILABLE
-  SOLD
-  OFF_PLAN
-  UNDER_CONSTRUCTION
-  RESERVED
-}
-
-enum ProjectStatus {
-  PLANNING
-  UNDER_CONSTRUCTION
-  COMPLETED
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
-enum LeadStatus {
-  NEW
-  CONTACTED
-  QUALIFIED
-  NEGOTIATING
-  CLOSED_WON
-  CLOSED_LOST
-}
-
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   email         String    @unique
   password      String?
   phone         String?
-  role          UserRole  @default(CLIENT)
+  role          String    @default("CLIENT")
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())
@@ -75,17 +25,17 @@ model User {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -93,14 +43,15 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
@@ -109,14 +60,14 @@ model VerificationToken {
 }
 
 model Property {
-  id            String             @id @default(cuid())
+  id            String             @id @default(auto()) @map("_id") @db.ObjectId
   slug          String             @unique
   title         String
   titleAr       String
-  description   String             @db.Text
-  descriptionAr String             @db.Text
-  type          PropertyType
-  status        PropertyStatus
+  description   String
+  descriptionAr String
+  type          String
+  status        String
   price         Float
   currency      String             @default("SAR")
   area          Float
@@ -131,7 +82,7 @@ model Property {
   images        PropertyImage[]
   videos        String[]
   floorPlans    String[]
-  projectId     String?
+  projectId     String?            @db.ObjectId
   project       Project?           @relation(fields: [projectId], references: [id])
   isFeatured    Boolean            @default(false)
   isPublished   Boolean            @default(false)
@@ -142,18 +93,18 @@ model Property {
 }
 
 model PropertyImage {
-  id         String   @id @default(cuid())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   url        String
   alt        String
   order      Int      @default(0)
-  propertyId String
+  propertyId String   @db.ObjectId
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model PropertyFavorite {
-  id         String   @id @default(cuid())
-  userId     String
-  propertyId String
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  propertyId String   @db.ObjectId
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
@@ -162,13 +113,13 @@ model PropertyFavorite {
 }
 
 model Project {
-  id             String        @id @default(cuid())
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
   slug           String        @unique
   name           String
   nameAr         String
-  description    String        @db.Text
+  description    String
   type           String
-  status         ProjectStatus
+  status         String
   location       String
   launchDate     DateTime?
   completionDate DateTime?
@@ -183,7 +134,7 @@ model Project {
 }
 
 model MeetingRoom {
-  id        String    @id @default(cuid())
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   capacity  Int
   amenities String[]
@@ -194,12 +145,12 @@ model MeetingRoom {
 }
 
 model Booking {
-  id           String        @id @default(cuid())
-  referenceNo  String        @unique @default(cuid())
-  roomId       String
-  room         MeetingRoom   @relation(fields: [roomId], references: [id])
-  userId       String?
-  user         User?         @relation(fields: [userId], references: [id])
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  referenceNo  String      @unique
+  roomId       String      @db.ObjectId
+  room         MeetingRoom @relation(fields: [roomId], references: [id])
+  userId       String?     @db.ObjectId
+  user         User?       @relation(fields: [userId], references: [id])
   guestName    String
   guestEmail   String
   guestPhone   String
@@ -208,41 +159,41 @@ model Booking {
   date         DateTime
   startTime    String
   endTime      String
-  attendees    Int           @default(1)
+  attendees    Int         @default(1)
   notes        String?
-  status       BookingStatus @default(PENDING)
+  status       String      @default("PENDING")
   cancelReason String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 model Lead {
-  id         String     @id @default(cuid())
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   email      String
   phone      String?
   company    String?
-  message    String     @db.Text
+  message    String
   source     String?
-  status     LeadStatus @default(NEW)
-  assignedTo String?
+  status     String     @default("NEW")
+  assignedTo String?    @db.ObjectId
   notes      LeadNote[]
-  propertyId String?
+  propertyId String?    @db.ObjectId
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
 model LeadNote {
-  id        String   @id @default(cuid())
-  content   String   @db.Text
-  authorId  String
-  leadId    String
-  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  authorId  String   @db.ObjectId
+  leadId    String   @db.ObjectId
+  lead      Lead     @relation(fields: [leadId], references: [id])
   createdAt DateTime @default(now())
 }
 
 model NewsletterSubscriber {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   email       String   @unique
   isConfirmed Boolean  @default(false)
   token       String?
@@ -250,12 +201,12 @@ model NewsletterSubscriber {
 }
 
 model BlogPost {
-  id          String    @id @default(cuid())
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   slug        String    @unique
   title       String
   titleAr     String
-  excerpt     String    @db.Text
-  body        String    @db.Text
+  excerpt     String
+  body        String
   coverImage  String
   category    String
   tags        String[]
@@ -267,22 +218,22 @@ model BlogPost {
 }
 
 model FAQ {
-  id          String  @id @default(cuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   question    String
   questionAr  String
-  answer      String  @db.Text
-  answerAr    String  @db.Text
+  answer      String
+  answerAr    String
   category    String
   order       Int     @default(0)
   isPublished Boolean @default(true)
 }
 
 model Testimonial {
-  id          String  @id @default(cuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   clientName  String
   clientTitle String?
-  content     String  @db.Text
-  contentAr   String? @db.Text
+  content     String
+  contentAr   String?
   rating      Int     @default(5)
   propertyId  String?
   avatar      String?
@@ -291,7 +242,7 @@ model Testimonial {
 }
 
 model PageView {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   path      String
   referrer  String?
   userAgent String?

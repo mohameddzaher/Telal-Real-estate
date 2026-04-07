@@ -1,93 +1,39 @@
-// Telal Development — Prisma Schema
-// This schema mirrors the frontend types
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  MANAGER
-  AGENT
-  ANALYST
-  CONTENT_EDITOR
-  CLIENT
-  GUEST
-}
-
-enum PropertyType {
-  RESIDENTIAL
-  COMMERCIAL
-  MIXED_USE
-  OFF_PLAN
-  RETAIL
-  HOSPITALITY
-}
-
-enum PropertyStatus {
-  AVAILABLE
-  SOLD
-  OFF_PLAN
-  UNDER_CONSTRUCTION
-  RESERVED
-}
-
-enum ProjectStatus {
-  PLANNING
-  UNDER_CONSTRUCTION
-  COMPLETED
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
-enum LeadStatus {
-  NEW
-  CONTACTED
-  QUALIFIED
-  NEGOTIATING
-  CLOSED_WON
-  CLOSED_LOST
-}
-
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   email         String    @unique
   phone         String?
   password      String?
-  role          UserRole  @default(CLIENT)
+  role          String    @default("CLIENT")
   image         String?
   emailVerified DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   bookings  Booking[]
-  leads     Lead[]    @relation("AssignedLeads")
   leadNotes LeadNote[]
 }
 
 model Property {
-  id            String         @id @default(cuid())
-  slug          String         @unique
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug          String   @unique
   title         String
   titleAr       String
   description   String
   descriptionAr String
-  type          PropertyType
-  status        PropertyStatus
+  type          String
+  status        String
   price         Float
-  currency      String         @default("SAR")
+  currency      String   @default("SAR")
   area          Float
   bedrooms      Int?
   bathrooms     Int?
@@ -100,51 +46,46 @@ model Property {
   amenities     String[]
   videos        String[]
   floorPlans    String[]
-  projectId     String?
-  project       Project?       @relation(fields: [projectId], references: [id])
-  isFeatured    Boolean        @default(false)
-  isPublished   Boolean        @default(false)
-  views         Int            @default(0)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  projectId     String?  @db.ObjectId
+  isFeatured    Boolean  @default(false)
+  isPublished   Boolean  @default(false)
+  views         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   images PropertyImage[]
-  leads  Lead[]
 }
 
 model PropertyImage {
-  id         String   @id @default(cuid())
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
   url        String
   alt        String
-  order      Int      @default(0)
-  propertyId String
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  order      Int    @default(0)
+  propertyId String @db.ObjectId
 }
 
 model Project {
-  id             String        @id @default(cuid())
-  slug           String        @unique
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug           String    @unique
   name           String
   nameAr         String
   description    String
   type           String
-  status         ProjectStatus
+  status         String
   location       String
   launchDate     DateTime?
   completionDate DateTime?
   totalUnits     Int?
   masterPlan     String?
-  coverImage     String        @default("")
+  coverImage     String    @default("")
   gallery        String[]
-  isPublished    Boolean       @default(false)
-  isFeatured     Boolean       @default(false)
-  createdAt      DateTime      @default(now())
-
-  properties Property[]
+  isPublished    Boolean   @default(false)
+  isFeatured     Boolean   @default(false)
+  createdAt      DateTime  @default(now())
 }
 
 model MeetingRoom {
-  id        String    @id @default(cuid())
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   capacity  Int
   amenities String[]
@@ -156,12 +97,12 @@ model MeetingRoom {
 }
 
 model Booking {
-  id           String        @id @default(cuid())
-  referenceNo  String        @unique
-  roomId       String
-  room         MeetingRoom   @relation(fields: [roomId], references: [id])
-  userId       String?
-  user         User?         @relation(fields: [userId], references: [id])
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  referenceNo  String   @unique
+  roomId       String   @db.ObjectId
+  room         MeetingRoom @relation(fields: [roomId], references: [id])
+  userId       String?  @db.ObjectId
+  user         User?    @relation(fields: [userId], references: [id])
   guestName    String
   guestEmail   String
   guestPhone   String
@@ -172,43 +113,41 @@ model Booking {
   endTime      String
   attendees    Int
   notes        String?
-  status       BookingStatus @default(PENDING)
+  status       String   @default("PENDING")
   cancelReason String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Lead {
-  id         String     @id @default(cuid())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   email      String
   phone      String?
   company    String?
   message    String
   source     String?
-  status     LeadStatus @default(NEW)
-  assignedTo String?
-  assignee   User?      @relation("AssignedLeads", fields: [assignedTo], references: [id])
-  propertyId String?
-  property   Property?  @relation(fields: [propertyId], references: [id])
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  status     String   @default("NEW")
+  assignedTo String?  @db.ObjectId
+  propertyId String?  @db.ObjectId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   notes LeadNote[]
 }
 
 model LeadNote {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   content   String
-  authorId  String
+  authorId  String   @db.ObjectId
   author    User     @relation(fields: [authorId], references: [id])
-  leadId    String
-  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId    String   @db.ObjectId
+  lead      Lead     @relation(fields: [leadId], references: [id])
   createdAt DateTime @default(now())
 }
 
 model NewsletterSubscriber {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   email       String   @unique
   isConfirmed Boolean  @default(false)
   token       String?
@@ -216,7 +155,7 @@ model NewsletterSubscriber {
 }
 
 model BlogPost {
-  id          String    @id @default(cuid())
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   slug        String    @unique
   title       String
   titleAr     String
@@ -233,7 +172,7 @@ model BlogPost {
 }
 
 model FAQ {
-  id          String  @id @default(cuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   question    String
   questionAr  String
   answer      String
@@ -244,7 +183,7 @@ model FAQ {
 }
 
 model Testimonial {
-  id          String  @id @default(cuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   clientName  String
   clientTitle String?
   content     String
@@ -257,7 +196,7 @@ model Testimonial {
 }
 
 model PageView {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   page      String
   referrer  String?
   userAgent String?
