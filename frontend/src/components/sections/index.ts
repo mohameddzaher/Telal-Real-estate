@@ -1,0 +1,13 @@
+export { default as HeroSection } from "./HeroSection";
+export { default as SignatureStatement } from "./SignatureStatement";
+export { default as FeaturedProperties } from "./FeaturedProperties";
+export { default as StatsSection } from "./StatsSection";
+export { default as ProjectsShowcase } from "./ProjectsShowcase";
+export { default as ServicesSection } from "./ServicesSection";
+export { default as WhyTelal } from "./WhyTelal";
+export { default as LocationsMap } from "./LocationsMap";
+export { default as TestimonialsSection } from "./TestimonialsSection";
+export { default as InsightsPreview } from "./InsightsPreview";
+export { default as NewsletterSection } from "./NewsletterSection";
+export { default as AwardsSection } from "./AwardsSection";
+export { default as FooterCTA } from "./FooterCTA";
