@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://telal-bakend.onrender.com";
 
 export async function apiGet(path: string) {
   const res = await fetch(`${API_URL}${path}`);
