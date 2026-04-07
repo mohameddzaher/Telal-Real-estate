@@ -29,27 +29,28 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* Team Grid */}
+      {/* Chairman Featured */}
       <section className="section-padding bg-black-deep">
         <div className="container-luxury">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="max-w-4xl mx-auto">
             {teamMembers.map((member) => (
-              <div key={member.id} className="card-luxury group">
-                {/* Image placeholder */}
-                <div className="aspect-[3/4] relative overflow-hidden">
-                  <img src={member.image || "/images/placeholder-team.jpg"} alt={member.name} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black-DEFAULT/80 to-transparent" />
+              <div key={member.id} className="flex flex-col md:flex-row gap-12 items-center">
+                {/* Photo */}
+                <div className="w-64 h-64 md:w-80 md:h-80 relative rounded-sm overflow-hidden border border-gold/20 shrink-0">
+                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                 </div>
 
-                <div className="p-6">
-                  <h3 className="font-display text-2xl text-white mb-1">
+                {/* Info */}
+                <div className="flex-1 text-center md:text-left">
+                  <p className="eyebrow mb-3">{member.role}</p>
+                  <h2 className="font-display text-3xl md:text-4xl text-white mb-2">
                     {member.name}
-                  </h3>
-                  <p className="text-gold text-sm uppercase tracking-wider mb-4">
-                    {member.role}
+                  </h2>
+                  <p className="font-display text-lg text-gold/60 mb-6">
+                    {member.nameAr}
                   </p>
-                  <p className="body-text text-sm mb-4">
-                    {truncate(member.bio, 160)}
+                  <p className="body-text leading-relaxed mb-6">
+                    {member.bio}
                   </p>
                   {member.linkedin && (
                     <a
