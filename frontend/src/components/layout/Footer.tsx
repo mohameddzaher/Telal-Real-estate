@@ -71,7 +71,7 @@ export default function Footer() {
           {/* Column 1: Brand */}
           <div className="lg:col-span-1">
             <Link href="/">
-              <span className="font-display text-xl text-gold tracking-[0.3em] uppercase">TELAL</span>
+              <span className="font-display text-xl tracking-[0.3em] uppercase"><span className="text-gold">T</span><span className="text-white">ELAL</span></span>
             </Link>
             <p className="mt-4 font-body text-sm text-white/40 leading-relaxed">
               {locale === "ar"

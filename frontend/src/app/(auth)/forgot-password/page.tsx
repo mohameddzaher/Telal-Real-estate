@@ -53,7 +53,7 @@ export default function ForgotPasswordPage() {
       {/* Logo */}
       <div className="text-center mb-10">
         <Link href="/">
-          <span className="font-display text-3xl text-gold tracking-[0.3em]">TELAL</span>
+          <span className="font-display text-3xl tracking-[0.3em] uppercase"><span className="text-gold">T</span><span className="text-white">ELAL</span></span>
         </Link>
       </div>
 

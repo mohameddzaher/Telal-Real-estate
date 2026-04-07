@@ -84,9 +84,9 @@ export default function Preloader() {
       {/* TELAL text */}
       <span
         ref={textRef}
-        className="font-display text-4xl md:text-6xl text-gold tracking-[0.4em] uppercase opacity-0 select-none"
+        className="font-display text-4xl md:text-6xl tracking-[0.4em] uppercase opacity-0 select-none"
       >
-        TELAL
+        <span className="text-gold">T</span><span className="text-white">ELAL</span>
       </span>
 
       {/* Golden line */}

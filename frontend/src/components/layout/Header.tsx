@@ -58,7 +58,7 @@ export default function Header() {
           <nav className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
             <Link href="/" className="relative z-10">
-              <span className="font-display text-xl text-gold tracking-[0.3em] uppercase">TELAL</span>
+              <span className="font-display text-xl tracking-[0.3em] uppercase"><span className="text-gold">T</span><span className="text-white">ELAL</span></span>
             </Link>
 
             {/* Desktop Navigation */}

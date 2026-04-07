@@ -114,7 +114,7 @@ export default function AdminLayout({
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-black-border">
           <Link href="/admin">
-            <span className="font-display text-lg text-gold tracking-[0.3em] uppercase">TELAL</span>
+            <span className="font-display text-lg tracking-[0.3em] uppercase"><span className="text-gold">T</span><span className="text-white">ELAL</span></span>
           </Link>
           <button
             type="button"
