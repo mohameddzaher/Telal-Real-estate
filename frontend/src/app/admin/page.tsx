@@ -2,7 +2,6 @@ import {
   TrendingUp,
   TrendingDown,
   Target,
-  Calendar as _Calendar,
   Building,
   DollarSign,
   Eye,

@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { STATS } from "@/lib/constants";
 import { useTranslation } from "@/hooks/useTranslation";
 import { localized } from "@/lib/translations";
+import { useContentStore } from "@/store/content";
 
 function AnimatedNumber({
   target,
@@ -52,12 +52,21 @@ export default function StatsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { locale } = useTranslation();
+  const homepage = useContentStore((s) => s.homepage);
+
+  // Build dynamic stats from the content store
+  const dynamicStats = [
+    { value: homepage.statProjects, suffix: "+", label: "Projects Completed", labelAr: "مشروع مكتمل" },
+    { value: homepage.statUnits, suffix: "+", label: "Units Delivered", labelAr: "وحدة تم تسليمها" },
+    { value: homepage.statPortfolio, suffix: "B+", label: "SAR Portfolio Value", labelAr: "مليار ريال قيمة المحفظة" },
+    { value: homepage.statYears, suffix: "+", label: "Years of Excellence", labelAr: "سنة من التميز" },
+  ];
 
   return (
     <section className="section-padding bg-black-deep grid-pattern">
       <div ref={ref} className="container-luxury">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {STATS.map((stat, i) => (
+          {dynamicStats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 30 }}

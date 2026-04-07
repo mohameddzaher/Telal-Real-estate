@@ -2,9 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useContentStore } from "@/store/content";
 
 export default function SignatureStatement() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const homepage = useContentStore((s) => s.homepage);
+  const quote = locale === "ar" ? homepage.signatureQuoteAr : homepage.signatureQuote;
 
   return (
     <section className="relative section-padding bg-black bg-noise overflow-hidden">
@@ -17,19 +20,7 @@ export default function SignatureStatement() {
           className="flex-1"
         >
           <p className="font-display text-2xl sm:text-3xl md:text-4xl font-light leading-snug text-white/90">
-            {t.signature.line1}{" "}
-            <span className="text-gradient-gold">
-              {t.signature.highlight1}
-            </span>{" "}
-            {t.signature.and}{" "}
-            <span className="text-gradient-gold">
-              {t.signature.highlight2}
-            </span>
-            .
-          </p>
-          <p className="mt-8 font-display text-xl sm:text-2xl md:text-3xl font-light leading-snug text-white/70">
-            {t.signature.line2}{" "}
-            <span className="text-gradient-gold">{t.signature.highlight3}</span>.
+            {quote}
           </p>
         </motion.blockquote>
 

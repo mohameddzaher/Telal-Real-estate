@@ -58,7 +58,7 @@ export default function Header() {
           <nav className="flex items-center justify-between h-20 lg:h-24">
             {/* Logo */}
             <Link href="/" className="relative z-10">
-              <img src="/images/wide.png" alt="Telal Development" className="h-8 w-auto" />
+              <span className="font-display text-xl text-gold tracking-[0.3em] uppercase">TELAL</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -120,6 +120,11 @@ export default function Header() {
                   AR
                 </button>
               </div>
+
+              {/* Book a Meeting */}
+              <Link href="/booking" className="btn-gold text-xs hidden md:inline-flex">
+                {locale === "ar" ? "احجز اجتماع" : "Book a Meeting"}
+              </Link>
 
               {/* Auth-aware CTA */}
               {isLoggedIn ? (

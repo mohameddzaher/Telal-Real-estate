@@ -3,16 +3,33 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowDown } from "lucide-react";
-import { SITE_CONFIG, STATS } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
 import { useTranslation } from "@/hooks/useTranslation";
 import { localized } from "@/lib/translations";
+import { useContentStore } from "@/store/content";
 
 export default function HeroSection() {
   const { t, locale } = useTranslation();
+  const homepage = useContentStore((s) => s.homepage);
 
-  const statLine = STATS.map(
+  // Build stats from content store values
+  const dynamicStats = [
+    { value: homepage.statProjects, suffix: "+", label: "Projects Completed", labelAr: "مشروع مكتمل" },
+    { value: homepage.statUnits, suffix: "+", label: "Units Delivered", labelAr: "وحدة تم تسليمها" },
+    { value: homepage.statPortfolio, suffix: "B+", label: "SAR Portfolio Value", labelAr: "مليار ريال قيمة المحفظة" },
+    { value: homepage.statYears, suffix: "+", label: "Years of Excellence", labelAr: "سنة من التميز" },
+  ];
+
+  const statLine = dynamicStats.map(
     (s) => `${s.value}${s.suffix} ${localized(s.label, s.labelAr, locale)}`
   ).join(" \u2022 ");
+
+  // Derive hero text from store, with last word highlighted
+  const heroTitle = locale === "ar" ? homepage.heroTitleAr : homepage.heroTitle;
+  const heroWords = heroTitle.split(" ");
+  const lastWord = heroWords.pop() || "";
+  const titleMain = heroWords.join(" ");
+  const heroSubtitle = locale === "ar" ? homepage.heroSubtitleAr : homepage.heroSubtitle;
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black">
@@ -38,10 +55,8 @@ export default function HeroSection() {
           transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="font-display font-extralight tracking-tight leading-none text-4xl sm:text-display lg:text-hero text-white max-w-5xl"
         >
-          {t.hero.titleLine1}
-          <br />
-          {t.hero.titleLine2}{" "}
-          <span className="text-gradient-gold">{t.hero.titleHighlight}</span>
+          {titleMain}{" "}
+          <span className="text-gradient-gold">{lastWord}</span>
         </motion.h1>
 
         <motion.p
@@ -50,7 +65,7 @@ export default function HeroSection() {
           transition={{ duration: 1, delay: 0.9 }}
           className="mt-6 text-gray-light font-body text-base md:text-lg max-w-xl"
         >
-          {t.hero.subtitle}
+          {heroSubtitle}
         </motion.p>
 
         <motion.div

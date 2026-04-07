@@ -1,126 +1,105 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { isReducedMotion } from "@/lib/utils";
-
-const SESSION_KEY = "telal-visited";
+import { useAppStore } from "@/store";
 
 export default function Preloader() {
-  const [show, setShow] = useState(false);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
+  const preloaderRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLImageElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const [show, setShow] = useState(true);
+  const setPreloaderComplete = useAppStore((s) => s.setPreloaderComplete);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(SESSION_KEY)) {
+    if (typeof window !== "undefined" && sessionStorage.getItem("telal_visited")) {
       setShow(false);
+      setPreloaderComplete();
       return;
     }
-    setShow(true);
-  }, []);
 
-  useEffect(() => {
-    if (!show) return;
     if (isReducedMotion()) {
-      sessionStorage.setItem(SESSION_KEY, "1");
       setShow(false);
+      setPreloaderComplete();
+      sessionStorage.setItem("telal_visited", "true");
       return;
     }
-
-    const overlay = overlayRef.current;
-    const counter = counterRef.current;
-    const line = lineRef.current;
-    const logo = logoRef.current;
-    if (!overlay || !counter || !line || !logo) return;
-
-    document.body.style.overflow = "hidden";
-
-    gsap.set(logo, { opacity: 0, scale: 0.8 });
 
     const tl = gsap.timeline({
       onComplete: () => {
-        sessionStorage.setItem(SESSION_KEY, "1");
-        document.body.style.overflow = "";
         setShow(false);
+        setPreloaderComplete();
+        sessionStorage.setItem("telal_visited", "true");
       },
     });
 
-    // Counter: 00 -> 100
-    const counterObj = { value: 0 };
-    tl.to(counterObj, {
+    // Counter animation 00 → 100
+    const counter = { value: 0 };
+    tl.to(counter, {
       value: 100,
-      duration: 2.0,
-      ease: "power2.inOut",
+      duration: 2,
+      ease: "power2.out",
       onUpdate: () => {
-        if (counter) {
-          counter.textContent = String(Math.round(counterObj.value)).padStart(2, "0");
+        if (counterRef.current) {
+          counterRef.current.textContent = String(Math.round(counter.value)).padStart(2, "0");
         }
       },
-    }, 0);
+    });
 
-    // Fade in and scale up logo
-    tl.to(
-      logo,
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 1.0,
-        ease: "power2.out",
-      },
-      0.2
-    );
-
-    // Golden line sweep at ~2.0s
+    // Text fade in
     tl.fromTo(
-      line,
-      { scaleX: 0, transformOrigin: "left center" },
-      { scaleX: 1, duration: 0.5, ease: "power4.out" },
-      2.0
+      textRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      0.3
     );
 
-    // Fade out overlay
-    tl.to(overlay, {
-      opacity: 0,
-      duration: 0.3,
-      ease: "power2.inOut",
-    }, 2.5);
+    // Golden line sweep at the end
+    tl.fromTo(
+      lineRef.current,
+      { scaleX: 0 },
+      { scaleX: 1, duration: 0.6, ease: "power2.inOut" },
+      1.8
+    );
 
-    return () => {
-      tl.kill();
-      document.body.style.overflow = "";
-    };
-  }, [show]);
+    // Fade out everything
+    tl.to(preloaderRef.current, {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.in",
+    }, 2.3);
+
+    return () => { tl.kill(); };
+  }, [setPreloaderComplete]);
 
   if (!show) return null;
 
   return (
     <div
-      ref={overlayRef}
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black-DEFAULT"
-      aria-hidden="true"
+      ref={preloaderRef}
+      className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
     >
-      {/* TELAL Logo */}
-      <img
-        ref={logoRef}
-        src="/images/square-512.png"
-        alt="Telal Development"
-        className="w-24 h-24 object-contain"
-      />
+      {/* TELAL text */}
+      <span
+        ref={textRef}
+        className="font-display text-4xl md:text-6xl text-gold tracking-[0.4em] uppercase opacity-0 select-none"
+      >
+        TELAL
+      </span>
 
-      {/* Golden horizontal line */}
+      {/* Golden line */}
       <div
         ref={lineRef}
-        className="absolute left-0 right-0 h-[1px] top-1/2 mt-[60px] bg-gold"
-        style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+        className="absolute bottom-1/2 left-1/4 right-1/4 h-px bg-gold origin-left"
+        style={{ transform: "scaleX(0)", marginTop: "60px" }}
       />
 
-      {/* Percentage counter */}
+      {/* Counter */}
       <span
         ref={counterRef}
-        className="absolute bottom-8 right-8 font-display text-2xl md:text-3xl text-gold tracking-widest"
+        className="absolute bottom-8 right-8 font-display text-xl text-gold/40"
       >
         00
       </span>

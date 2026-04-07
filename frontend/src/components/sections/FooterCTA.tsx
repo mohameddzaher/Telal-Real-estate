@@ -3,9 +3,13 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useContentStore } from "@/store/content";
 
 export default function FooterCTA() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const homepage = useContentStore((s) => s.homepage);
+  const ctaTitle = locale === "ar" ? homepage.ctaTitleAr : homepage.ctaTitle;
+  const ctaDescription = locale === "ar" ? homepage.ctaDescriptionAr : homepage.ctaDescription;
 
   return (
     <section className="relative section-padding bg-black overflow-hidden">
@@ -20,11 +24,10 @@ export default function FooterCTA() {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-display font-light text-white leading-tight mb-6">
-            {t.sections.readyToFind}{" "}
-            <span className="text-gradient-gold">{t.sections.legacy}</span>?
+            {ctaTitle}
           </h2>
           <p className="body-text max-w-xl mx-auto mb-10">
-            {t.sections.readyBody}
+            {ctaDescription}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact" className="btn-gold">

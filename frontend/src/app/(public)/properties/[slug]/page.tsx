@@ -284,19 +284,25 @@ export default function PropertyDetailPage({
               )}
 
               {/* Floor Plans Section */}
-              <div>
-                <h2 className="font-display text-3xl font-light tracking-tight text-white">
-                  Floor Plans
-                </h2>
-                <div className="mt-2 h-px w-16 bg-gold" />
-                <div className="mt-6 overflow-hidden rounded-sm border border-black-border">
-                  <div className="flex aspect-[16/9] items-center justify-center bg-gradient-to-br from-black-surface to-black-deep">
-                    <p className="text-sm text-gray-mid">
-                      Floor plan available upon request
-                    </p>
+              {property.floorPlans && property.floorPlans.length > 0 && (
+                <div>
+                  <h2 className="font-display text-3xl font-light tracking-tight text-white">
+                    Floor Plans
+                  </h2>
+                  <div className="mt-2 h-px w-16 bg-gold" />
+                  <div className="mt-6 grid gap-4">
+                    {property.floorPlans.map((plan, i) => (
+                      <div key={i} className="overflow-hidden rounded-sm border border-black-border">
+                        <img
+                          src={plan}
+                          alt={`${property.title} — Floor Plan ${i + 1}`}
+                          className="w-full object-contain bg-black-deep"
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Location */}
               <div>

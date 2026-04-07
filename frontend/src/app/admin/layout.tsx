@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
 import {
   LayoutDashboard,
+  Home,
   Building,
   FolderKanban,
   Calendar,
@@ -26,6 +27,7 @@ import {
 
 const sidebarItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Homepage", href: "/admin/homepage", icon: Home },
   { label: "Properties", href: "/admin/properties", icon: Building },
   { label: "Projects", href: "/admin/projects", icon: FolderKanban },
   { label: "Bookings", href: "/admin/bookings", icon: Calendar },
@@ -46,9 +48,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const _router = useRouter();
+  useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, token, logout, isLoading: _isLoading } = useAuthStore();
+  const { user, token, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -112,7 +114,7 @@ export default function AdminLayout({
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-black-border">
           <Link href="/admin">
-            <img src="/images/wide.png" alt="Telal Development" className="h-6 w-auto" />
+            <span className="font-display text-lg text-gold tracking-[0.3em] uppercase">TELAL</span>
           </Link>
           <button
             type="button"
