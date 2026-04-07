@@ -14,7 +14,7 @@ const STEPS = [
 ];
 
 export default function BookingFlow() {
-  const { step, setStep, selectedDate, selectedTime, selectedRoom } =
+  const { step, setStep, selectedDate, selectedTime, selectedRoom, bookingLoading } =
     useBookingStore();
 
   const canProceedStep1 = selectedDate && selectedTime && selectedRoom;
@@ -118,9 +118,10 @@ export default function BookingFlow() {
             <button
               type="submit"
               form="booking-details-form"
-              className="btn-gold"
+              disabled={bookingLoading}
+              className={cn("btn-gold", bookingLoading && "opacity-60 cursor-not-allowed")}
             >
-              Confirm Booking
+              {bookingLoading ? "Submitting..." : "Confirm Booking"}
             </button>
           )}
         </div>

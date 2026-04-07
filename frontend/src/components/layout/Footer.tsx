@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   MapPin,
@@ -10,24 +12,28 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useTranslation } from "@/hooks/useTranslation";
+import { localized } from "@/lib/translations";
 import BackToTop from "./BackToTop";
 
-const quickLinks = [
-  { label: "About", href: "/about" },
-  { label: "Team", href: "/team" },
-  { label: "Services", href: "/services" },
-  { label: "Career", href: "/career" },
-  { label: "FAQ", href: "/faq" },
-];
-
-const propertyLinks = [
-  { label: "Residential", href: "/properties?type=residential" },
-  { label: "Commercial", href: "/properties?type=commercial" },
-  { label: "Off-Plan", href: "/properties?type=off-plan" },
-  { label: "Projects", href: "/projects" },
-];
-
 export default function Footer() {
+  const { t, locale } = useTranslation();
+
+  const quickLinks = [
+    { label: t.footer.about, href: "/about" },
+    { label: t.footer.team, href: "/team" },
+    { label: t.footer.services, href: "/services" },
+    { label: t.footer.career, href: "/career" },
+    { label: t.footer.faq, href: "/faq" },
+  ];
+
+  const propertyLinks = [
+    { label: t.footer.residential, href: "/properties?type=residential" },
+    { label: t.footer.commercial, href: "/properties?type=commercial" },
+    { label: t.footer.offPlan, href: "/properties?type=off-plan" },
+    { label: t.footer.projects, href: "/projects" },
+  ];
+
   return (
     <footer className="relative bg-[#050505] border-t border-gold/10">
       {/* Main footer content */}
@@ -39,7 +45,7 @@ export default function Footer() {
               <img src="/images/wide.png" alt="Telal Development" className="h-8 w-auto" />
             </Link>
             <p className="mt-4 font-body text-sm text-white/40 leading-relaxed">
-              {SITE_CONFIG.tagline}
+              {localized(SITE_CONFIG.tagline, SITE_CONFIG.taglineAr, locale)}
             </p>
 
             {/* Social Links */}
@@ -86,7 +92,7 @@ export default function Footer() {
           {/* Column 2: Quick Links */}
           <div>
             <h4 className="font-display text-md text-gold/80 uppercase tracking-widest mb-6">
-              Quick Links
+              {t.footer.quickLinks}
             </h4>
             <ul className="flex flex-col gap-3">
               {quickLinks.map((link) => (
@@ -105,7 +111,7 @@ export default function Footer() {
           {/* Column 3: Properties */}
           <div>
             <h4 className="font-display text-md text-gold/80 uppercase tracking-widest mb-6">
-              Properties
+              {t.footer.properties}
             </h4>
             <ul className="flex flex-col gap-3">
               {propertyLinks.map((link) => (
@@ -124,13 +130,13 @@ export default function Footer() {
           {/* Column 4: Contact */}
           <div>
             <h4 className="font-display text-md text-gold/80 uppercase tracking-widest mb-6">
-              Contact
+              {t.footer.contact}
             </h4>
             <ul className="flex flex-col gap-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-gold/60 mt-0.5 shrink-0" />
                 <span className="font-body text-sm text-white/40 leading-relaxed">
-                  {SITE_CONFIG.address}
+                  {localized(SITE_CONFIG.address, SITE_CONFIG.addressAr, locale)}
                 </span>
               </li>
               <li>
@@ -157,7 +163,7 @@ export default function Footer() {
           {/* Column 5: WhatsApp CTA */}
           <div>
             <h4 className="font-display text-md text-gold/80 uppercase tracking-widest mb-6">
-              Get in Touch
+              {t.footer.getInTouch}
             </h4>
             <a
               href={`https://wa.me/${SITE_CONFIG.whatsapp.replace(/\+/g, "")}`}
@@ -166,10 +172,10 @@ export default function Footer() {
               className="inline-flex items-center gap-3 px-6 py-3.5 bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-widest font-body hover:bg-gold hover:text-black-deep transition-all duration-500 ease-luxury w-full justify-center"
             >
               <MessageCircle className="w-4 h-4" />
-              WhatsApp Us
+              {t.footer.whatsappUs}
             </a>
             <p className="mt-4 font-body text-xs text-white/30 leading-relaxed">
-              {SITE_CONFIG.officeHours}
+              {localized(SITE_CONFIG.officeHours, SITE_CONFIG.officeHoursAr, locale)}
             </p>
           </div>
         </div>
@@ -179,26 +185,26 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="mx-auto max-w-content px-gutter py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-white/25">
-            &copy; 2026 {SITE_CONFIG.name}. All rights reserved.
+            &copy; 2026 {SITE_CONFIG.name}. {t.footer.allRights}
           </p>
           <div className="flex items-center gap-6">
             <Link
               href="/privacy"
               className="font-body text-xs text-white/25 hover:text-gold/60 transition-colors duration-300"
             >
-              Privacy Policy
+              {t.footer.privacy}
             </Link>
             <Link
               href="/terms"
               className="font-body text-xs text-white/25 hover:text-gold/60 transition-colors duration-300"
             >
-              Terms
+              {t.footer.terms}
             </Link>
             <Link
               href="/sitemap"
               className="font-body text-xs text-white/25 hover:text-gold/60 transition-colors duration-300"
             >
-              Sitemap
+              {t.footer.sitemap}
             </Link>
           </div>
         </div>

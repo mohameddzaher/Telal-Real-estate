@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormData } from "@/lib/validations";
+import { useAuthStore } from "@/store/auth";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const router = useRouter();
+  const { register: registerUser, isLoading, error, clearError } = useAuthStore();
 
   const {
     register,
@@ -21,12 +24,18 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (_data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     if (!agreed) return;
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
+    clearError();
+    const success = await registerUser({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      password: data.password,
+    });
+    if (success) {
+      router.push("/portal");
+    }
   };
 
   return (
@@ -44,6 +53,13 @@ export default function RegisterPage() {
         <p className="text-gray-light text-sm text-center mb-8">
           Join Telal Development&apos;s exclusive client portal
         </p>
+
+        {/* Error message */}
+        {error && (
+          <div className="mb-5 p-3 bg-red-500/10 border border-red-500/20 rounded-sm">
+            <p className="text-red-400 text-sm text-center">{error}</p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Full Name */}
@@ -173,13 +189,13 @@ export default function RegisterPage() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={isSubmitting || !agreed}
+            disabled={isLoading || !agreed}
             className="btn-gold w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? (
+            {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : null}
-            {isSubmitting ? "Creating Account..." : "Create Account"}
+            {isLoading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

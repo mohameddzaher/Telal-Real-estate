@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Home, Building2, Layers, Map, Store, Hotel } from "lucide-react";
 import { services } from "@/lib/data";
+import { useTranslation } from "@/hooks/useTranslation";
+import { localized } from "@/lib/translations";
 import type { LucideIcon } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -16,6 +18,8 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function ServicesSection() {
+  const { t, locale } = useTranslation();
+
   return (
     <section className="section-padding bg-black-deep">
       <div className="container-luxury">
@@ -26,8 +30,8 @@ export default function ServicesSection() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <p className="eyebrow mb-4">What We Do</p>
-          <h2 className="heading-section text-white">Our Services</h2>
+          <p className="eyebrow mb-4">{t.sections.ourServices}</p>
+          <h2 className="heading-section text-white">{t.sections.ourServicesHeading}</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -47,10 +51,10 @@ export default function ServicesSection() {
                 >
                   <Icon className="w-8 h-8 text-gold mb-6 transition-transform duration-500 group-hover:scale-110" />
                   <h3 className="font-display text-xl text-white mb-3">
-                    {service.title}
+                    {localized(service.title, service.titleAr, locale)}
                   </h3>
                   <p className="text-sm text-gray-light font-body leading-relaxed">
-                    {service.description}
+                    {localized(service.description, service.descriptionAr, locale)}
                   </p>
                 </Link>
               </motion.div>

@@ -4,6 +4,9 @@ import Link from "next/link";
 import { X, Camera, Briefcase, MessageSquare, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, SITE_CONFIG } from "@/lib/constants";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useAppStore } from "@/store";
+import { localized } from "@/lib/translations";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -11,6 +14,9 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const { t, locale } = useTranslation();
+  const setLocale = useAppStore((s) => s.setLocale);
+
   return (
     <div
       className={cn(
@@ -32,6 +38,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
       {/* Close button */}
       <button
+        type="button"
         onClick={onClose}
         className="absolute top-6 right-6 z-50 p-2 text-white/60 hover:text-gold transition-colors duration-300"
         aria-label="Close menu"
@@ -58,7 +65,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 transitionDelay: isOpen ? `${150 + index * 75}ms` : "0ms",
               }}
             >
-              {item.label}
+              {localized(item.label, item.labelAr, locale)}
             </Link>
           ))}
 
@@ -78,7 +85,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 : "0ms",
             }}
           >
-            Book a Meeting
+            {t.common.bookMeeting}
           </Link>
         </nav>
 
@@ -130,10 +137,28 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </a>
 
           {/* Language toggle */}
-          <div className="ml-auto font-body text-xs uppercase tracking-widest">
-            <span className="text-gold">EN</span>
-            <span className="text-white/30 mx-1">/</span>
-            <span className="text-white/40">AR</span>
+          <div className="ml-auto font-body text-xs uppercase tracking-widest flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => { setLocale("en"); onClose(); }}
+              className={cn(
+                "transition-colors duration-300",
+                locale === "en" ? "text-gold" : "text-white/40 hover:text-gold"
+              )}
+            >
+              EN
+            </button>
+            <span className="text-white/30">/</span>
+            <button
+              type="button"
+              onClick={() => { setLocale("ar"); onClose(); }}
+              className={cn(
+                "transition-colors duration-300",
+                locale === "ar" ? "text-gold" : "text-white/40 hover:text-gold"
+              )}
+            >
+              AR
+            </button>
           </div>
         </div>
       </div>

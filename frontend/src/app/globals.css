@@ -191,3 +191,41 @@ html.lenis, html.lenis body {
 [dir="rtl"] .font-display {
   font-family: var(--font-noto-arabic), serif;
 }
+
+[dir="rtl"] .font-body {
+  font-family: var(--font-noto-arabic), system-ui, sans-serif;
+}
+
+/* Flip directional utilities for RTL */
+[dir="rtl"] .origin-left {
+  transform-origin: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Ensure tracking/letter-spacing is tighter in Arabic */
+[dir="rtl"] .tracking-widest {
+  letter-spacing: 0.05em;
+}
+
+[dir="rtl"] .tracking-wider {
+  letter-spacing: 0.02em;
+}
+
+[dir="rtl"] .tracking-tight {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .tracking-\[0\.3em\] {
+  letter-spacing: 0.05em;
+}
+
+[dir="rtl"] .tracking-\[0\.2em\] {
+  letter-spacing: 0.03em;
+}

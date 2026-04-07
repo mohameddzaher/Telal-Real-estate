@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { STATS } from "@/lib/constants";
+import { useTranslation } from "@/hooks/useTranslation";
+import { localized } from "@/lib/translations";
 
 function AnimatedNumber({
   target,
@@ -49,6 +51,7 @@ function AnimatedNumber({
 export default function StatsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { locale } = useTranslation();
 
   return (
     <section className="section-padding bg-black-deep grid-pattern">
@@ -71,7 +74,7 @@ export default function StatsSection() {
                 />
               </p>
               <p className="text-xs uppercase tracking-[0.2em] text-gray-light font-body">
-                {stat.label}
+                {localized(stat.label, stat.labelAr, locale)}
               </p>
             </motion.div>
           ))}

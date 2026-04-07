@@ -25,7 +25,14 @@ export const useAppStore = create<AppState>((set) => ({
   isHeaderScrolled: false,
   setHeaderScrolled: (scrolled) => set({ isHeaderScrolled: scrolled }),
   locale: "en",
-  setLocale: (locale) => set({ locale }),
+  setLocale: (locale) => {
+    if (typeof window !== "undefined") {
+      document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+      document.documentElement.lang = locale;
+      localStorage.setItem("telal-locale", locale);
+    }
+    set({ locale });
+  },
 }));
 
 interface PropertyFilterState {
@@ -65,10 +72,16 @@ interface BookingState {
   selectedDate: Date | null;
   selectedTime: string | null;
   selectedRoom: string | null;
+  bookingRef: string | null;
+  bookingError: string | null;
+  bookingLoading: boolean;
   setStep: (step: number) => void;
   setSelectedDate: (date: Date | null) => void;
   setSelectedTime: (time: string | null) => void;
   setSelectedRoom: (room: string | null) => void;
+  setBookingRef: (ref: string | null) => void;
+  setBookingError: (error: string | null) => void;
+  setBookingLoading: (loading: boolean) => void;
   reset: () => void;
 }
 
@@ -77,10 +90,16 @@ export const useBookingStore = create<BookingState>((set) => ({
   selectedDate: null,
   selectedTime: null,
   selectedRoom: null,
+  bookingRef: null,
+  bookingError: null,
+  bookingLoading: false,
   setStep: (step) => set({ step }),
   setSelectedDate: (date) => set({ selectedDate: date }),
   setSelectedTime: (time) => set({ selectedTime: time }),
   setSelectedRoom: (room) => set({ selectedRoom: room }),
+  setBookingRef: (ref) => set({ bookingRef: ref }),
+  setBookingError: (error) => set({ bookingError: error }),
+  setBookingLoading: (loading) => set({ bookingLoading: loading }),
   reset: () =>
-    set({ step: 1, selectedDate: null, selectedTime: null, selectedRoom: null }),
+    set({ step: 1, selectedDate: null, selectedTime: null, selectedRoom: null, bookingRef: null, bookingError: null, bookingLoading: false }),
 }));

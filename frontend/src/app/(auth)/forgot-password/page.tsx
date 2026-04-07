@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2, Mail, ArrowLeft } from "lucide-react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+
 const forgotPasswordSchema = z.object({
   email: z.string().email("Please enter a valid email"),
 });
@@ -16,6 +18,7 @@ type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
 export default function ForgotPasswordPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -25,10 +28,22 @@ export default function ForgotPasswordPage() {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (_data: ForgotPasswordData) => {
+  const onSubmit = async (data: ForgotPasswordData) => {
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email }),
+      });
+      const json = await res.json();
+      if (!res.ok && json.message) {
+        // Even on error, show success to avoid email enumeration
+      }
+    } catch {
+      // Silently handle - show success regardless to avoid email enumeration
+    }
     setIsSubmitting(false);
     setSubmitted(true);
   };
@@ -67,6 +82,12 @@ export default function ForgotPasswordPage() {
             <p className="text-gray-light text-sm text-center mb-8 leading-relaxed">
               Enter your email address and we&apos;ll send you a link to reset your password.
             </p>
+
+            {error && (
+              <div className="mb-5 p-3 bg-red-500/10 border border-red-500/20 rounded-sm">
+                <p className="text-red-400 text-sm text-center">{error}</p>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div>

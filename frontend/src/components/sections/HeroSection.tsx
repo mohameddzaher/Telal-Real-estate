@@ -4,12 +4,16 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowDown } from "lucide-react";
 import { SITE_CONFIG, STATS } from "@/lib/constants";
-
-const statLine = STATS.map(
-  (s) => `${s.value}${s.suffix} ${s.label}`
-).join(" \u2022 ");
+import { useTranslation } from "@/hooks/useTranslation";
+import { localized } from "@/lib/translations";
 
 export default function HeroSection() {
+  const { t, locale } = useTranslation();
+
+  const statLine = STATS.map(
+    (s) => `${s.value}${s.suffix} ${localized(s.label, s.labelAr, locale)}`
+  ).join(" \u2022 ");
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black">
       {/* Animated gradient background */}
@@ -25,7 +29,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="eyebrow mb-6"
         >
-          {SITE_CONFIG.name}
+          {localized(SITE_CONFIG.name, SITE_CONFIG.nameAr, locale)}
         </motion.p>
 
         <motion.h1
@@ -34,9 +38,10 @@ export default function HeroSection() {
           transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="font-display font-extralight tracking-tight leading-none text-4xl sm:text-display lg:text-hero text-white max-w-5xl"
         >
-          WHERE VISION
+          {t.hero.titleLine1}
           <br />
-          MEETS <span className="text-gradient-gold">LEGACY</span>
+          {t.hero.titleLine2}{" "}
+          <span className="text-gradient-gold">{t.hero.titleHighlight}</span>
         </motion.h1>
 
         <motion.p
@@ -45,7 +50,7 @@ export default function HeroSection() {
           transition={{ duration: 1, delay: 0.9 }}
           className="mt-6 text-gray-light font-body text-base md:text-lg max-w-xl"
         >
-          {SITE_CONFIG.description}
+          {t.hero.subtitle}
         </motion.p>
 
         <motion.div
@@ -55,10 +60,10 @@ export default function HeroSection() {
           className="mt-10 flex flex-col sm:flex-row gap-4"
         >
           <Link href="/properties" className="btn-gold">
-            Explore Properties
+            {t.hero.cta1}
           </Link>
           <Link href="/about" className="btn-ghost">
-            Our Vision
+            {t.hero.cta2}
           </Link>
         </motion.div>
       </div>

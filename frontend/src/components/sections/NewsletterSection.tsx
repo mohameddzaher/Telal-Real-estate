@@ -2,26 +2,41 @@
 
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { Mail, Check } from "lucide-react";
+import { Mail, Check, AlertCircle } from "lucide-react";
+import { apiPost } from "@/lib/api";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email || !consent) return;
 
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError(null);
+    try {
+      const res = await apiPost("/api/newsletter", { email, consent: true });
+      if (res.status === 201 || res.ok) {
+        setSuccess(true);
+        setEmail("");
+        setConsent(false);
+      } else if (res.status === 409) {
+        setError("Already subscribed");
+      } else {
+        const body = await res.json().catch(() => ({}));
+        setError(body.message || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
       setLoading(false);
-      setSuccess(true);
-      setEmail("");
-      setConsent(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -38,11 +53,10 @@ export default function NewsletterSection() {
         >
           <Mail className="w-8 h-8 text-gold mx-auto mb-6" />
           <h2 className="heading-section text-white mb-4">
-            Stay Ahead of the Market
+            {t.sections.stayAhead}
           </h2>
           <p className="body-text mb-10 max-w-lg mx-auto">
-            Receive exclusive market insights, early access to new launches, and
-            curated investment opportunities delivered to your inbox.
+            {t.sections.newsletterBody}
           </p>
         </motion.div>
 
@@ -56,7 +70,7 @@ export default function NewsletterSection() {
               <Check className="w-6 h-6 text-success" />
             </span>
             <p className="text-white font-body text-base">
-              Welcome to the Telal circle. Check your inbox to confirm.
+              {t.sections.newsletterSuccess}
             </p>
           </motion.div>
         ) : (
@@ -73,7 +87,7 @@ export default function NewsletterSection() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder={t.enterEmail}
                 required
                 className="input-luxury flex-1"
               />
@@ -82,9 +96,16 @@ export default function NewsletterSection() {
                 disabled={loading || !consent}
                 className="btn-gold whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {loading ? "Subscribing..." : "Subscribe"}
+                {loading ? t.common.subscribing : t.common.subscribe}
               </button>
             </div>
+
+            {error && (
+              <div className="flex items-center gap-2 p-3 bg-error/10 border border-error/30 rounded-sm">
+                <AlertCircle className="w-4 h-4 text-error flex-shrink-0" />
+                <p className="text-sm text-error">{error}</p>
+              </div>
+            )}
 
             <label className="flex items-start gap-3 text-left cursor-pointer group">
               <input
@@ -94,8 +115,7 @@ export default function NewsletterSection() {
                 className="mt-0.5 w-4 h-4 accent-gold bg-black-deep border-black-border rounded-sm"
               />
               <span className="text-xs text-gray-mid font-body leading-relaxed">
-                I agree to receive marketing communications from Telal
-                Development. You can unsubscribe at any time.
+                {t.sections.newsletterConsent}
               </span>
             </label>
           </motion.form>

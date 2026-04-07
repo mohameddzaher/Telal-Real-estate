@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth";
 import {
   LayoutDashboard,
   Building,
@@ -28,11 +30,33 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { user, token, logout } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/portal") return pathname === "/portal";
     return pathname.startsWith(href);
   };
+
+  if (!mounted) return null;
+
+  if (!token || !user) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="font-display text-2xl text-white mb-2">Authentication Required</h2>
+          <p className="text-gray-light text-sm mb-6">Please sign in to access your portal.</p>
+          <Link href="/login" className="btn-gold">Sign In</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const displayName = user.name || "User";
 
   return (
     <div className="min-h-screen bg-black">
@@ -45,13 +69,18 @@ export default function PortalLayout({
           My Portal
         </span>
         <div className="flex-1" />
-        <Link
-          href="/login"
+        <span className="text-sm text-gray-light mr-4 hidden sm:inline">
+          {displayName}
+        </span>
+        <button
+          type="button"
+          onClick={logout}
           className="flex items-center gap-2 text-sm text-gray-light hover:text-white transition-colors"
+          title="Logout"
         >
           <LogOut className="w-4 h-4" />
-          Logout
-        </Link>
+          <span className="hidden sm:inline">Logout</span>
+        </button>
       </header>
 
       {/* Navigation tabs */}

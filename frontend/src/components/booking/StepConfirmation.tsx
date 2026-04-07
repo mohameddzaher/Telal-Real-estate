@@ -52,12 +52,12 @@ function buildIcsContent(
 }
 
 export default function StepConfirmation() {
-  const { selectedRoom, selectedDate, selectedTime, reset } =
+  const { selectedRoom, selectedDate, selectedTime, reset, bookingRef } =
     useBookingStore();
 
   const room = meetingRooms.find((r) => r.id === selectedRoom);
 
-  const refNo = useMemo(() => generateRefNumber(), []);
+  const refNo = useMemo(() => bookingRef || generateRefNumber(), [bookingRef]);
 
   const formattedDate = selectedDate
     ? selectedDate.toLocaleDateString("en-US", {

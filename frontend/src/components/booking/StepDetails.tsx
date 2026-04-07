@@ -3,13 +3,23 @@
 import { useBookingStore } from "@/store";
 import { meetingRooms } from "@/lib/data";
 import { bookingFormSchema, type BookingFormData } from "@/lib/validations";
+import { apiPost } from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, Clock, Building, Users } from "lucide-react";
+import { Calendar, Clock, Building, Users, AlertCircle, Loader2 } from "lucide-react";
 
 export default function StepDetails() {
-  const { selectedRoom, selectedDate, selectedTime, setStep } =
-    useBookingStore();
+  const {
+    selectedRoom,
+    selectedDate,
+    selectedTime,
+    setStep,
+    setBookingRef,
+    setBookingError,
+    setBookingLoading,
+    bookingError,
+    bookingLoading,
+  } = useBookingStore();
 
   const room = meetingRooms.find((r) => r.id === selectedRoom);
 
@@ -39,10 +49,34 @@ export default function StepDetails() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function onSubmit(_data: BookingFormData) {
-    // In production this would call an API. For now, advance to confirmation.
-    setStep(3);
+  async function onSubmit(data: BookingFormData) {
+    setBookingError(null);
+    setBookingLoading(true);
+    try {
+      const res = await apiPost("/api/bookings", {
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        company: data.company,
+        purpose: data.purpose,
+        attendees: data.attendees,
+        notes: data.notes,
+        date: selectedDate?.toISOString(),
+        timeSlot: selectedTime,
+        roomId: selectedRoom,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.message || "Booking failed. The time slot may already be taken.");
+      }
+      const body = await res.json();
+      setBookingRef(body.referenceNumber || body.ref || body.id || null);
+      setStep(3);
+    } catch (err) {
+      setBookingError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setBookingLoading(false);
+    }
   }
 
   return (
@@ -213,6 +247,22 @@ export default function StepDetails() {
               {...register("notes")}
             />
           </div>
+
+          {/* Booking Error */}
+          {bookingError && (
+            <div className="flex items-center gap-2 p-4 bg-error/10 border border-error/30 rounded-sm">
+              <AlertCircle className="w-4 h-4 text-error flex-shrink-0" />
+              <p className="text-sm text-error">{bookingError}</p>
+            </div>
+          )}
+
+          {/* Loading indicator */}
+          {bookingLoading && (
+            <div className="flex items-center gap-2 text-gold">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-sm font-body">Submitting booking...</span>
+            </div>
+          )}
         </form>
       </div>
 

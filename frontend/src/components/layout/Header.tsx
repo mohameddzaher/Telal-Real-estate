@@ -2,14 +2,26 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useAppStore } from "@/store";
+import { useAuthStore } from "@/store/auth";
+import { localized } from "@/lib/translations";
 import MobileMenu from "./MobileMenu";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { locale } = useTranslation();
+  const setLocale = useAppStore((s) => s.setLocale);
+  const { user, token } = useAuthStore();
+
+  const isLoggedIn = !!token && !!user;
+  const isAdmin = isLoggedIn && ["SUPER_ADMIN", "ADMIN", "MANAGER", "AGENT"].includes(user!.role);
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
+  const dashboardHref = isAdmin ? "/admin" : "/portal";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +69,7 @@ export default function Header() {
                     href={item.href}
                     className="relative font-body text-sm uppercase tracking-widest text-white/70 hover:text-gold transition-colors duration-300 py-2"
                   >
-                    {item.label}
+                    {localized(item.label, item.labelAr, locale)}
                     {/* Gold underline animation */}
                     <span className="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-luxury origin-left" />
                   </Link>
@@ -72,7 +84,7 @@ export default function Header() {
                             href={child.href}
                             className="block px-5 py-2.5 text-sm font-body text-white/60 hover:text-gold hover:bg-gold/5 transition-all duration-200"
                           >
-                            {child.label}
+                            {localized(child.label, child.labelAr, locale)}
                           </Link>
                         ))}
                       </div>
@@ -85,22 +97,50 @@ export default function Header() {
             {/* Right side actions */}
             <div className="flex items-center gap-4 lg:gap-6">
               {/* Language Toggle */}
-              <button
-                className="hidden md:flex items-center gap-1.5 font-body text-xs uppercase tracking-widest text-white/50 hover:text-gold transition-colors duration-300"
-                aria-label="Toggle language"
-              >
-                <span className="text-gold">EN</span>
+              <div className="hidden md:flex items-center gap-1.5 font-body text-xs uppercase tracking-widest">
+                <button
+                  onClick={() => setLocale("en")}
+                  className={cn(
+                    "transition-colors duration-300",
+                    locale === "en" ? "text-gold" : "text-white/50 hover:text-gold"
+                  )}
+                  aria-label="Switch to English"
+                >
+                  EN
+                </button>
                 <span className="text-white/30">/</span>
-                <span>AR</span>
-              </button>
+                <button
+                  onClick={() => setLocale("ar")}
+                  className={cn(
+                    "transition-colors duration-300",
+                    locale === "ar" ? "text-gold" : "text-white/50 hover:text-gold"
+                  )}
+                  aria-label="Switch to Arabic"
+                >
+                  AR
+                </button>
+              </div>
 
-              {/* Book a Meeting CTA */}
-              <Link
-                href="/booking"
-                className="hidden md:inline-flex items-center px-6 py-2.5 bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-widest font-body hover:bg-gold hover:text-black-deep transition-all duration-500 ease-luxury"
-              >
-                Book a Meeting
-              </Link>
+              {/* Auth-aware CTA */}
+              {isLoggedIn ? (
+                <Link
+                  href={dashboardHref}
+                  className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-widest font-body hover:bg-gold hover:text-black-deep transition-all duration-500 ease-luxury"
+                >
+                  <span className="w-6 h-6 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-[10px] font-semibold">
+                    {userInitial}
+                  </span>
+                  {isAdmin ? "Admin Panel" : "My Portal"}
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-widest font-body hover:bg-gold hover:text-black-deep transition-all duration-500 ease-luxury"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  Login
+                </Link>
+              )}
 
               {/* Mobile Menu Toggle */}
               <button

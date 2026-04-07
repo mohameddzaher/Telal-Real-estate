@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function SignatureStatement() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative section-padding bg-black bg-noise overflow-hidden">
       <div className="container-luxury flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-24">
@@ -14,20 +17,19 @@ export default function SignatureStatement() {
           className="flex-1"
         >
           <p className="font-display text-2xl sm:text-3xl md:text-4xl font-light leading-snug text-white/90">
-            For over sixteen years, Telal Development has been crafting spaces
-            where{" "}
+            {t.signature.line1}{" "}
             <span className="text-gradient-gold">
-              ambition finds its address
+              {t.signature.highlight1}
             </span>{" "}
-            and{" "}
+            {t.signature.and}{" "}
             <span className="text-gradient-gold">
-              vision finds its home
+              {t.signature.highlight2}
             </span>
             .
           </p>
           <p className="mt-8 font-display text-xl sm:text-2xl md:text-3xl font-light leading-snug text-white/70">
-            We don&apos;t build properties &mdash; we build{" "}
-            <span className="text-gradient-gold">legacies</span>.
+            {t.signature.line2}{" "}
+            <span className="text-gradient-gold">{t.signature.highlight3}</span>.
           </p>
         </motion.blockquote>
 
@@ -40,7 +42,7 @@ export default function SignatureStatement() {
         >
           <span className="block w-px h-16 bg-gold/30 mb-4" />
           <span className="font-display text-lg text-gold/60 tracking-wider">
-            est. 2008
+            {t.signature.est}
           </span>
         </motion.div>
       </div>

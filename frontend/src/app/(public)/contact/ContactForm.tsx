@@ -7,7 +7,8 @@ import {
   contactFormSchema,
   type ContactFormData,
 } from "@/lib/validations";
-import { Loader2, CheckCircle } from "lucide-react";
+import { apiPost } from "@/lib/api";
+import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 
 const subjects = [
   "General Inquiry",
@@ -20,10 +21,12 @@ const subjects = [
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    reset: resetForm,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
@@ -32,11 +35,26 @@ export default function ContactForm() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (_data: ContactFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setSubmitted(true);
+  const onSubmit = async (data: ContactFormData) => {
+    setError(null);
+    try {
+      const res = await apiPost("/api/contact", {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        subject: data.subject,
+        message: data.message,
+        preferredContact: data.preferredContact,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.message || "Failed to send message. Please try again.");
+      }
+      setSubmitted(true);
+      resetForm();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   if (submitted) {
@@ -181,6 +199,14 @@ export default function ContactForm() {
           ))}
         </div>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="flex items-center gap-2 p-4 bg-error/10 border border-error/30 rounded-sm">
+          <AlertCircle className="w-4 h-4 text-error flex-shrink-0" />
+          <p className="text-sm text-error">{error}</p>
+        </div>
+      )}
 
       {/* Submit */}
       <button

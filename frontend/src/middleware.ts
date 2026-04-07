@@ -7,9 +7,8 @@ const authRoutes = ["/login", "/register", "/forgot-password"];
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check for auth token (simplified — in production use NextAuth middleware)
-  const token = request.cookies.get("next-auth.session-token")?.value
-    || request.cookies.get("__Secure-next-auth.session-token")?.value;
+  // Check for auth token from our custom cookie
+  const token = request.cookies.get("auth_token")?.value;
 
   // Protect portal and admin routes
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));

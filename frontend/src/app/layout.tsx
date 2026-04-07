@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "@/components/providers/AuthProvider";
+import LocaleProvider from "@/components/providers/LocaleProvider";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -70,9 +72,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${notoArabic.variable}`}>
+    <html lang="en" dir="ltr" className={`${cormorant.variable} ${inter.variable} ${notoArabic.variable}`} suppressHydrationWarning>
       <body className="bg-black text-white font-body antialiased overflow-x-hidden">
-        {children}
+        <AuthProvider>
+          <LocaleProvider>
+            {children}
+          </LocaleProvider>
+        </AuthProvider>
       </body>
     </html>
   );

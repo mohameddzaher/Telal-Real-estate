@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth";
 import {
   LayoutDashboard,
   Building,
@@ -20,6 +21,7 @@ import {
   Bell,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -36,18 +38,59 @@ const sidebarItems = [
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
+const ADMIN_ROLES = ["SUPER_ADMIN", "ADMIN", "MANAGER", "AGENT"];
+
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const _router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, token, logout, isLoading: _isLoading } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin";
     return pathname.startsWith(href);
   };
+
+  // Show nothing while hydrating to avoid flash
+  if (!mounted) return null;
+
+  // Auth check: redirect if not authenticated or not admin
+  if (!token || !user) {
+    return (
+      <div className="min-h-screen bg-black-surface flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="font-display text-2xl text-white mb-2">Authentication Required</h2>
+          <p className="text-gray-light text-sm mb-6">Please sign in to access the admin panel.</p>
+          <Link href="/login" className="btn-gold">Sign In</Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!ADMIN_ROLES.includes(user.role)) {
+    return (
+      <div className="min-h-screen bg-black-surface flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="font-display text-2xl text-white mb-2">Unauthorized</h2>
+          <p className="text-gray-light text-sm mb-6">You do not have permission to access the admin panel.</p>
+          <Link href="/portal" className="btn-gold">Go to Portal</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const userInitials = user.name
+    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "??";
 
   return (
     <div className="min-h-screen bg-black-surface">
@@ -72,8 +115,10 @@ export default function AdminLayout({
             <img src="/images/wide.png" alt="Telal Development" className="h-6 w-auto" />
           </Link>
           <button
+            type="button"
             onClick={() => setSidebarOpen(false)}
             className="ml-auto lg:hidden text-gray-light hover:text-white"
+            title="Close sidebar"
           >
             <X className="w-5 h-5" />
           </button>
@@ -109,12 +154,20 @@ export default function AdminLayout({
         <div className="p-4 border-t border-black-border">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center">
-              <span className="text-gold text-xs font-medium">AK</span>
+              <span className="text-gold text-xs font-medium">{userInitials}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-white truncate">Admin User</p>
-              <p className="text-xs text-gray-mid">Super Admin</p>
+              <p className="text-sm text-white truncate">{user.name}</p>
+              <p className="text-xs text-gray-mid">{user.role.replace(/_/g, " ")}</p>
             </div>
+            <button
+              type="button"
+              onClick={logout}
+              className="text-gray-mid hover:text-red-400 transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </aside>
@@ -124,8 +177,10 @@ export default function AdminLayout({
         {/* Top bar */}
         <header className="h-16 bg-[#090909] border-b border-black-border flex items-center px-6 gap-4 sticky top-0 z-30">
           <button
+            type="button"
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden text-gray-light hover:text-white"
+            title="Open sidebar"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -148,14 +203,14 @@ export default function AdminLayout({
           </div>
 
           {/* Notification */}
-          <button className="relative text-gray-light hover:text-white transition-colors">
+          <button type="button" className="relative text-gray-light hover:text-white transition-colors" title="Notifications">
             <Bell className="w-4 h-4" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-gold rounded-full" />
           </button>
 
           {/* Avatar */}
           <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center">
-            <span className="text-gold text-xs font-medium">AK</span>
+            <span className="text-gold text-xs font-medium">{userInitials}</span>
           </div>
         </header>
 

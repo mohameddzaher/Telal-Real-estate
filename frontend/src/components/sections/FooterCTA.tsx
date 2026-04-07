@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function FooterCTA() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative section-padding bg-black overflow-hidden">
       <div className="absolute inset-0 bg-radial-gold opacity-20" />
@@ -17,20 +20,18 @@ export default function FooterCTA() {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-display font-light text-white leading-tight mb-6">
-            Ready to Find Your{" "}
-            <span className="text-gradient-gold">Legacy</span>?
+            {t.sections.readyToFind}{" "}
+            <span className="text-gradient-gold">{t.sections.legacy}</span>?
           </h2>
           <p className="body-text max-w-xl mx-auto mb-10">
-            Whether you are looking for a forever home, a strategic investment,
-            or a landmark commercial space, our team is ready to guide you
-            through every step.
+            {t.sections.readyBody}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact" className="btn-gold">
-              Contact Us
+              {t.common.contactUs}
             </Link>
             <Link href="/properties" className="btn-ghost">
-              Browse Properties
+              {t.common.browseProperties}
             </Link>
           </div>
         </motion.div>

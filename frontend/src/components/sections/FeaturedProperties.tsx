@@ -5,10 +5,14 @@ import Link from "next/link";
 import { MapPin, ArrowUpRight } from "lucide-react";
 import { properties } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
+import { localized } from "@/lib/translations";
 
 const featured = properties.filter((p) => p.isFeatured).slice(0, 5);
 
 export default function FeaturedProperties() {
+  const { t, locale } = useTranslation();
+
   return (
     <section className="section-padding bg-black">
       <div className="container-luxury">
@@ -20,9 +24,9 @@ export default function FeaturedProperties() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <p className="eyebrow mb-4">Featured Collection</p>
+          <p className="eyebrow mb-4">{t.sections.featuredCollection}</p>
           <h2 className="heading-section text-white">
-            Exceptional Properties
+            {t.sections.exceptionalProperties}
           </h2>
         </motion.div>
 
@@ -42,7 +46,7 @@ export default function FeaturedProperties() {
               >
                 {/* Image placeholder */}
                 <div className="relative aspect-[3/4] overflow-hidden">
-                  <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={property.title} className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
+                  <img src={property.images?.[0]?.url || "/images/placeholder-property.jpg"} alt={localized(property.title, property.titleAr, locale)} className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105" />
                   {/* Type badge */}
                   <span className="absolute top-3 left-3 px-3 py-1 text-xs uppercase tracking-wider bg-black/70 text-gold border border-gold/20 rounded-sm font-body">
                     {property.type.replace("_", " ")}
@@ -56,7 +60,7 @@ export default function FeaturedProperties() {
                 {/* Details */}
                 <div className="p-4">
                   <h3 className="font-display text-lg text-gold mb-1 leading-tight">
-                    {property.title}
+                    {localized(property.title, property.titleAr, locale)}
                   </h3>
                   <p className="text-sm text-gold-muted font-body mb-3">
                     {formatPrice(property.price, property.currency)}
@@ -73,12 +77,12 @@ export default function FeaturedProperties() {
                       {property.bedrooms !== undefined && (
                         <span>
                           {property.bedrooms === 0
-                            ? "Studio"
-                            : `${property.bedrooms} Bed`}
+                            ? t.properties.studio
+                            : `${property.bedrooms} ${t.properties.bed}`}
                         </span>
                       )}
                       {property.bathrooms !== undefined && (
-                        <span>{property.bathrooms} Bath</span>
+                        <span>{property.bathrooms} {t.properties.bath}</span>
                       )}
                     </div>
                   )}
@@ -97,7 +101,7 @@ export default function FeaturedProperties() {
           className="mt-14 text-center"
         >
           <Link href="/properties" className="btn-ghost">
-            View All Properties
+            {t.common.viewAllProperties}
           </Link>
         </motion.div>
       </div>

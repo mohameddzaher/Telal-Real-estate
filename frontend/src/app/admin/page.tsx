@@ -2,47 +2,24 @@ import {
   TrendingUp,
   TrendingDown,
   Target,
-  Calendar,
+  Calendar as _Calendar,
   Building,
   DollarSign,
   Eye,
 } from "lucide-react";
 import { properties } from "@/lib/data";
+import { PropertyStatus } from "@/types";
+import { formatPrice } from "@/lib/utils";
 
 export const metadata = {
   title: "Admin Dashboard — Telal Development",
 };
 
-const kpis = [
-  {
-    label: "New Leads",
-    value: "23",
-    change: "+12%",
-    trend: "up" as const,
-    icon: Target,
-  },
-  {
-    label: "Bookings Today",
-    value: "5",
-    change: "+2",
-    trend: "up" as const,
-    icon: Calendar,
-  },
-  {
-    label: "Active Properties",
-    value: "8",
-    change: "0%",
-    trend: "up" as const,
-    icon: Building,
-  },
-  {
-    label: "Revenue Pipeline",
-    value: "SAR 45.2M",
-    change: "+8.3%",
-    trend: "up" as const,
-    icon: DollarSign,
-  },
-];
+const activeProperties = properties.filter(
+  (p) => p.isPublished && p.status !== PropertyStatus.SOLD
+);
+const totalViews = properties.reduce((sum, p) => sum + (p.views || 0), 0);
+const totalPipeline = activeProperties.reduce((sum, p) => sum + p.price, 0);
 
 const recentLeads = [
   { name: "Faisal Al-Otaibi", email: "faisal@example.com", source: "Website", status: "New", date: "Apr 5, 2026" },
@@ -56,6 +33,37 @@ const upcomingBookings = [
   { guest: "Mohammed Al-Harbi", room: "Executive Suite A", date: "Apr 6, 2026", time: "10:00 AM" },
   { guest: "Layla Al-Qahtani", room: "Boardroom", date: "Apr 6, 2026", time: "2:00 PM" },
   { guest: "Omar Al-Shehri", room: "Meeting Room B", date: "Apr 7, 2026", time: "11:30 AM" },
+];
+
+const kpis = [
+  {
+    label: "New Leads",
+    value: String(recentLeads.length),
+    change: "+12%",
+    trend: "up" as const,
+    icon: Target,
+  },
+  {
+    label: "Total Property Views",
+    value: totalViews.toLocaleString(),
+    change: "",
+    trend: "up" as const,
+    icon: Eye,
+  },
+  {
+    label: "Active Properties",
+    value: String(activeProperties.length),
+    change: `${properties.length} total`,
+    trend: "up" as const,
+    icon: Building,
+  },
+  {
+    label: "Revenue Pipeline",
+    value: formatPrice(totalPipeline, "SAR"),
+    change: "+8.3%",
+    trend: "up" as const,
+    icon: DollarSign,
+  },
 ];
 
 const statusColors: Record<string, string> = {

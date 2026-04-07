@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import Link from "next/link";
+import { ViewTracker } from "@/components/analytics/ViewTracker";
 import {
   MapPin,
   BedDouble,
@@ -164,6 +165,7 @@ export default function PropertyDetailPage({
 
   return (
     <main>
+      <ViewTracker path={`/properties/${property.slug}`} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

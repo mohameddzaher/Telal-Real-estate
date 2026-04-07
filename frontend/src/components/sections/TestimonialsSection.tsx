@@ -4,11 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { testimonials } from "@/lib/data";
+import { useTranslation } from "@/hooks/useTranslation";
+import { localized } from "@/lib/translations";
 
 const published = testimonials.filter((t) => t.isPublished);
 
 export default function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
+  const { t, locale } = useTranslation();
 
   const next = useCallback(() => {
     setCurrent((prev) => (prev + 1) % published.length);
@@ -35,8 +38,8 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.8 }}
           className="mb-12"
         >
-          <p className="eyebrow mb-4">Testimonials</p>
-          <h2 className="heading-section text-white">What Our Clients Say</h2>
+          <p className="eyebrow mb-4">{t.sections.testimonials}</p>
+          <h2 className="heading-section text-white">{t.sections.testimonialsHeading}</h2>
         </motion.div>
 
         <div className="relative min-h-[280px] flex flex-col items-center justify-center">
@@ -55,7 +58,7 @@ export default function TestimonialsSection() {
               className="pt-12"
             >
               <p className="font-display text-xl sm:text-2xl font-light text-white/90 leading-relaxed mb-8 max-w-3xl">
-                {testimonial.content}
+                {localized(testimonial.content, testimonial.contentAr, locale)}
               </p>
               <p className="text-gold font-body text-sm font-medium">
                 {testimonial.clientName}
@@ -72,6 +75,7 @@ export default function TestimonialsSection() {
         {/* Navigation */}
         <div className="mt-10 flex items-center justify-center gap-6">
           <button
+            type="button"
             onClick={prev}
             aria-label="Previous testimonial"
             className="w-10 h-10 flex items-center justify-center border border-black-border rounded-sm text-gray-light hover:border-gold/40 hover:text-gold transition-colors duration-300"
@@ -83,6 +87,7 @@ export default function TestimonialsSection() {
             {String(published.length).padStart(2, "0")}
           </span>
           <button
+            type="button"
             onClick={next}
             aria-label="Next testimonial"
             className="w-10 h-10 flex items-center justify-center border border-black-border rounded-sm text-gray-light hover:border-gold/40 hover:text-gold transition-colors duration-300"

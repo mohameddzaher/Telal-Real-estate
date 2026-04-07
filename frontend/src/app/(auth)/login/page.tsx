@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "@/lib/validations";
+import { useAuthStore } from "@/store/auth";
 import { Eye, EyeOff, Loader2, Globe } from "lucide-react";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
+  const { login, isLoading, error, clearError } = useAuthStore();
 
   const {
     register,
@@ -20,30 +22,18 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (_data: LoginFormData) => {
-    setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setSubmitted(true);
+  const onSubmit = async (data: LoginFormData) => {
+    clearError();
+    const success = await login(data.email, data.password);
+    if (success) {
+      const user = useAuthStore.getState().user;
+      if (user && ["SUPER_ADMIN", "ADMIN", "MANAGER", "AGENT"].includes(user.role)) {
+        router.push("/admin");
+      } else {
+        router.push("/portal");
+      }
+    }
   };
-
-  if (submitted) {
-    return (
-      <div className="w-full max-w-md">
-        <div className="bg-black-surface border border-black-border rounded-sm p-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-6">
-            <svg className="w-8 h-8 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 className="font-display text-2xl text-white mb-2">Welcome Back</h2>
-          <p className="text-gray-light text-sm">Redirecting you to your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full max-w-md">
@@ -60,6 +50,13 @@ export default function LoginPage() {
         <p className="text-gray-light text-sm text-center mb-8">
           Sign in to access your account
         </p>
+
+        {/* Error message */}
+        {error && (
+          <div className="mb-5 p-3 bg-red-500/10 border border-red-500/20 rounded-sm">
+            <p className="text-red-400 text-sm text-center">{error}</p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
@@ -116,13 +113,13 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isLoading}
             className="btn-gold w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? (
+            {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : null}
-            {isSubmitting ? "Signing In..." : "Sign In"}
+            {isLoading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
@@ -134,7 +131,7 @@ export default function LoginPage() {
         </div>
 
         {/* Google */}
-        <button className="btn-ghost w-full gap-2">
+        <button type="button" className="btn-ghost w-full gap-2">
           <Globe className="w-4 h-4" />
           Google
         </button>
