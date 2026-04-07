@@ -78,11 +78,14 @@ router.post("/", (req: Request, res: Response): void => {
     const validated = result.data;
     const pageView = {
       id: `pv-${Date.now()}`,
-      ...validated,
+      page: validated.page || "",
+      referrer: validated.referrer,
+      userAgent: validated.userAgent,
+      sessionId: validated.sessionId,
       timestamp: new Date(),
     };
 
-    pageViews.push(pageView);
+    pageViews.push(pageView as any);
 
     res.status(201).json({ success: true, message: "Page view recorded" });
   } catch {

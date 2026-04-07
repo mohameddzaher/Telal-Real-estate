@@ -146,7 +146,7 @@ router.post("/", (req: Request, res: Response): void => {
       createdAt: new Date(),
     };
 
-    bookings.push(newBooking);
+    bookings.push(newBooking as any);
 
     res.status(201).json({
       success: true,

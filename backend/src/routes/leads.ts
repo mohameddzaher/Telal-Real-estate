@@ -71,7 +71,7 @@ router.post("/", (req: Request, res: Response): void => {
       createdAt: new Date(),
     };
 
-    leads.push(newLead);
+    leads.push(newLead as any);
 
     res.status(201).json({
       success: true,
