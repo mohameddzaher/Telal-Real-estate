@@ -129,7 +129,7 @@ export default function AboutPage() {
             </div>
             <div className="relative">
               <div className="aspect-[4/5] rounded-sm border border-black-border overflow-hidden">
-                <img src="/images/about-story.jpg" alt="Telal Development landmark building" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80" alt="Telal Development landmark building" className="w-full h-full object-cover" />
               </div>
               <div className="absolute -bottom-6 -left-6 w-48 h-48 bg-gradient-to-br from-gold/30 to-transparent rounded-sm blur-sm" />
             </div>
