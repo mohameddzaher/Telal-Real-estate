@@ -16,7 +16,7 @@ import analyticsRouter from "./routes/analytics";
 import authRouter from "./routes/auth";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Security
 app.use(helmet());
