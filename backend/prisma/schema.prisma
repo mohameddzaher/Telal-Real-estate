@@ -57,11 +57,12 @@ model Property {
 }
 
 model PropertyImage {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   url        String
   alt        String
-  order      Int    @default(0)
-  propertyId String @db.ObjectId
+  order      Int      @default(0)
+  propertyId String   @db.ObjectId
+  property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model Project {
